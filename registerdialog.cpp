@@ -87,5 +87,8 @@ bool RegisterDialog::checkLogin(QString login)
     return true;
 }
 
-
+void RegisterDialog::on_btn_back_clicked()
+{
+    RegisterDialog::close();
+}
 

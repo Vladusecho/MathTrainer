@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RegisterDialog</class>
- <widget class="QDialog" name="RegisterDialog">
+ <class>LoginDialog</class>
+ <widget class="QDialog" name="LoginDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,7 +29,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Регистрация</string>
+   <string>Вход в игру</string>
   </property>
   <property name="styleSheet">
    <string notr="true">background :rgb(170, 255, 255);
@@ -39,43 +39,38 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>90</y>
+     <y>120</y>
      <width>601</width>
-     <height>217</height>
+     <height>161</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="leftMargin">
-     <number>50</number>
+     <number>100</number>
     </property>
     <property name="rightMargin">
-     <number>50</number>
+     <number>100</number>
     </property>
     <item>
      <layout class="QFormLayout" name="formLayout">
-      <property name="rowWrapPolicy">
-       <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
-      </property>
       <property name="labelAlignment">
        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
       </property>
-      <property name="formAlignment">
-       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-      </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="le_login">
         <property name="font">
          <font>
           <family>Comic Sans MS</family>
           <pointsize>22</pointsize>
+          <italic>true</italic>
           <bold>true</bold>
          </font>
         </property>
         <property name="styleSheet">
          <string notr="true">color:rgb(158, 79, 255)</string>
         </property>
-        <property name="text">
-         <string>Логин:</string>
+        <property name="placeholderText">
+         <string>user42</string>
         </property>
        </widget>
       </item>
@@ -93,24 +88,6 @@
         </property>
         <property name="text">
          <string>Пароль:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="le_login">
-        <property name="font">
-         <font>
-          <family>Comic Sans MS</family>
-          <pointsize>22</pointsize>
-          <italic>true</italic>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:rgb(158, 79, 255)</string>
-        </property>
-        <property name="placeholderText">
-         <string>user42</string>
         </property>
        </widget>
       </item>
@@ -133,68 +110,9 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="font">
-         <font>
-          <family>Comic Sans MS</family>
-          <pointsize>22</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:rgb(158, 79, 255)</string>
-        </property>
-        <property name="text">
-         <string>Повтор пароля:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="le_repeat_pass">
-        <property name="font">
-         <font>
-          <family>Comic Sans MS</family>
-          <pointsize>22</pointsize>
-          <italic>true</italic>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:rgb(158, 79, 255)</string>
-        </property>
-        <property name="placeholderText">
-         <string>Tralaler0!</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QPushButton" name="btn_to_reg">
-        <property name="font">
-         <font>
-          <family>Comic Sans MS</family>
-          <pointsize>22</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color:rgb(158, 79, 255);
-background:rgb(120, 255, 192)</string>
-        </property>
-        <property name="text">
-         <string>Регистрация</string>
-        </property>
-        <property name="autoDefault">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
        <widget class="QPushButton" name="btn_back">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -209,6 +127,9 @@ background:rgb(120, 255, 192)</string>
         <property name="cursor">
          <cursorShape>PointingHandCursor</cursorShape>
         </property>
+        <property name="layoutDirection">
+         <enum>Qt::LayoutDirection::LeftToRight</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">color:rgb(158, 79, 255);
 background:rgb(120, 255, 192)</string>
@@ -218,6 +139,50 @@ background:rgb(120, 255, 192)</string>
         </property>
         <property name="autoDefault">
          <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="btn_to_start">
+        <property name="font">
+         <font>
+          <family>Comic Sans MS</family>
+          <pointsize>22</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+        </property>
+        <property name="text">
+         <string>Вперед в игру!</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <family>Comic Sans MS</family>
+          <pointsize>22</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:rgb(158, 79, 255)</string>
+        </property>
+        <property name="text">
+         <string>Логин:</string>
         </property>
        </widget>
       </item>

@@ -22,6 +22,8 @@ private slots:
 
     void on_btn_exit_clicked();
 
+    void on_btn_login_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

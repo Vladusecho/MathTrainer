@@ -17,6 +17,8 @@ public:
 
 private slots:
     void on_btn_to_reg_clicked();
+    void on_btn_back_clicked();
+
 private:
     Ui::RegisterDialog *ui;
     void showWarningMessage(QString title, QString text);
