@@ -21,3 +21,9 @@ void MainWindow::on_btn_reg_clicked()
     newWindow.exec();
 }
 
+
+void MainWindow::on_btn_exit_clicked()
+{
+    qApp->exit();
+}
+

@@ -17,9 +17,12 @@ public:
 
 private slots:
     void on_btn_to_reg_clicked();
-
 private:
     Ui::RegisterDialog *ui;
+    void showWarningMessage(QString title, QString text);
+    void showSuccessMessage(QString text);
+    bool checkPassword(QString password);
+    bool checkLogin(QString login);
 };
 
 #endif // REGISTERDIALOG_H

@@ -20,6 +20,8 @@ public:
 private slots:
     void on_btn_reg_clicked();
 
+    void on_btn_exit_clicked();
+
 private:
     Ui::MainWindow *ui;
 };
