@@ -24,6 +24,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         registerdialog.h registerdialog.cpp registerdialog.ui
+        logindialog.h logindialog.cpp logindialog.ui
 
     )
 # Define target properties for Android with Qt 6 as:
