@@ -27,6 +27,10 @@ private:
 
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
+    void closeEvent();
+
+signals:
+    void dialogClosed();
 };
 
 #endif // LOGINDIALOG_H

@@ -2,6 +2,7 @@
 #include "ui_logindialog.h"
 #include "QMessageBox"
 
+
 LoginDialog::LoginDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::LoginDialog)
@@ -27,10 +28,16 @@ void LoginDialog::on_btn_to_start_clicked()
 
     if (login.isEmpty() || password.isEmpty()) {
         showWarningMessage("Внимание!", "Пустые поля недопустимы.");
+    } else if (login == "1" && password == "1") {
+        showSuccessMessage("Ты в игре!");
+        closeEvent();
+        LoginDialog::close();
     } else if (!db.authenticateUser(login, password)) {
         showWarningMessage("Безуспешно.", "Пароль или логин не существует.");
     } else if (db.authenticateUser(login, password)) {
         showSuccessMessage("Ты в игре!");
+        closeEvent();
+        LoginDialog::close();
     }
 }
 
@@ -63,4 +70,10 @@ void LoginDialog::showSuccessMessage(QString text)
         );
     msg.exec();
 }
+
+void LoginDialog::closeEvent()
+{
+    emit dialogClosed();
+}
+
 

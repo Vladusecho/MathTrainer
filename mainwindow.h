@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QStackedWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,10 +27,17 @@ private slots:
 
     void on_btn_about_clicked();
 
+    void on_btn_change_account_clicked();
+
+    void on_btn_exit_game_clicked();
+
 private:
     Ui::MainWindow *ui;
 
     template<typename T>
     void createDialog(T dialogType);
+
+    void slideToIndex(QStackedWidget *stack, int newIndex);
+    void handleDialogClosed();
 };
 #endif // MAINWINDOW_H
