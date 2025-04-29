@@ -2,6 +2,7 @@
 #define REGISTERDIALOG_H
 
 #include <QDialog>
+#include "databasemanager.h"
 
 namespace Ui {
 class RegisterDialog;
@@ -21,6 +22,7 @@ private slots:
 
 private:
     Ui::RegisterDialog *ui;
+    Database db;
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
     bool checkPassword(QString password);
