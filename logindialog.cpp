@@ -27,8 +27,10 @@ void LoginDialog::on_btn_to_start_clicked()
 
     if (login.isEmpty() || password.isEmpty()) {
         showWarningMessage("Внимание!", "Пустые поля недопустимы.");
-    } else {
-       showSuccessMessage("Ты в игре!");
+    } else if (!db.authenticateUser(login, password)) {
+        showWarningMessage("Безуспешно.", "Пароль или логин не существует.");
+    } else if (db.authenticateUser(login, password)) {
+        showSuccessMessage("Ты в игре!");
     }
 }
 

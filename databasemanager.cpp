@@ -80,7 +80,7 @@ bool Database::authenticateUser(const QString &login, const QString &password)
 
     if(query.next()) {
         QString storedPassword = query.value(0).toString();
-        return (storedPassword == password); // В реальном приложении нужно сравнивать хэши
+        return (storedPassword == password);
     }
 
     return false;

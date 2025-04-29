@@ -2,6 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
+#include "databasemanager.h"
 
 namespace Ui {
 class LoginDialog;
@@ -22,6 +23,7 @@ private slots:
 
 private:
     Ui::LoginDialog *ui;
+    Database db;
 
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
