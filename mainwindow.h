@@ -28,5 +28,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    template<typename T>
+    void createDialog(T dialogType);
 };
 #endif // MAINWINDOW_H

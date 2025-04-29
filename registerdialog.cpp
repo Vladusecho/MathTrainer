@@ -34,6 +34,9 @@ void RegisterDialog::on_btn_to_reg_clicked()
     else if (password != repeatPassword) {
         showWarningMessage("Внимание!", "Пароли не совпадают.");
     }
+    else if (db.authenticateUser(login, password)) {
+        showWarningMessage("Внимание!", "Пользователь с такими данными уже существует!");
+    }
     else if (db.registerUser(login, password)){
         showSuccessMessage("Регистрация завершена!");
     }

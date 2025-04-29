@@ -10,6 +10,7 @@ Database::Database(QObject *parent) : QObject(parent), databaseName("game_databa
 Database::~Database()
 {
     if(db.isOpen()) {
+        qDebug() << "Database: connection off";
         db.close();
     }
 }
