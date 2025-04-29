@@ -1,252 +1,188 @@
 #include "databasemanager.h"
-#include <QDebug>
-#include <QFile>
-#include <QDateTime>
-#include <QFile>
-#include <QStandardPaths>
-#include <QCoreApplication>
-#include <QDir>
+#include <cmath>
 
-DatabaseManager& DatabaseManager::instance()
+Database::Database(QObject *parent) : QObject(parent), databaseName("game_database.sqlite")
 {
-    static DatabaseManager instance;
-    return instance;
+    connectToDatabase();
+    createTables();
 }
 
-DatabaseManager::DatabaseManager(QObject *parent) :
-    QObject(parent)
+Database::~Database()
 {
-    QString dbPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QDir().mkpath(dbPath);
-    dbPath += "/app_database.sqlite";
-
-    qDebug() << "Database path:" << dbPath;
-
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName(dbPath);
-
-    if (!m_db.open()) {
-        qCritical() << "Cannot open database";
-        return;
+    if(db.isOpen()) {
+        db.close();
     }
 }
 
-DatabaseManager::~DatabaseManager()
+bool Database::connectToDatabase()
 {
-    QMutexLocker locker(&m_mutex);
-    if (m_db.isOpen()) {
-        m_db.close();
-    }
-}
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(databaseName);
 
-QSqlDatabase DatabaseManager::getDatabase() const
-{
-    QMutexLocker locker(&m_mutex);
-    return m_db;
-}
-
-void DatabaseManager::initDatabase()
-{
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName("game_database.sqlite");
-
-    if (!m_db.open()) {
-        qCritical() << "Cannot open database";
-    }
-}
-
-void DatabaseManager::createTables()
-{
-    QFile schemaFile(":/db/database_schema.sql");
-    if (!schemaFile.open(QIODevice::ReadOnly)) {
-        qCritical() << "Cannot open schema file";
-        return;
-    }
-
-    QStringList schemaQueries = QString(schemaFile.readAll()).split(';');
-
-    QSqlQuery query;
-    for (const QString &q : schemaQueries) {
-        if (q.trimmed().isEmpty()) continue;
-        if (!query.exec(q)) {
-            qCritical() << "Failed to execute query";
-        }
-    }
-}
-
-bool DatabaseManager::executeQuery(QSqlQuery &query, const QString &queryStr, const QVariantMap &params) const
-{
-    QSqlDatabase db = getDatabase();
-    query = QSqlQuery(db);
-
-    if (!query.prepare(queryStr)) {
-        qCritical() << "Prepare failed";
+    if(!db.open()) {
+        qDebug() << "Error: connection with database failed";
         return false;
+    } else {
+        qDebug() << "Database: connection ok";
+        return true;
     }
+}
 
-    // Привязываем параметры
-    for (auto it = params.begin(); it != params.end(); ++it) {
-        query.bindValue(it.key(), it.value());
-    }
+bool Database::createTables()
+{
+    QSqlQuery query;
 
-    if (!query.exec()) {
-        qCritical() << "Query failed";
-        qCritical() << "Executed query:" << query.lastQuery();
-        qCritical() << "Bound values:" << query.boundValues();
+    // Users table
+    bool success = query.exec("CREATE TABLE IF NOT EXISTS users ("
+                              "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                              "login TEXT UNIQUE NOT NULL, "
+                              "password TEXT NOT NULL, "
+                              "level INTEGER DEFAULT 1, "
+                              "exp INTEGER DEFAULT 0)");
+
+    if(!success) {
+        qDebug() << "Error creating tables:" << query.lastError();
         return false;
     }
 
     return true;
 }
 
-bool DatabaseManager::userExists(const QString &username) const
+bool Database::registerUser(const QString &login, const QString &password)
 {
-    QSqlQuery query;
-    QVariantMap params;
-    params[":username"] = username;
-
-    if (!executeQuery(query, "SELECT COUNT(*) FROM users WHERE username = :username", params)) {
-        return false;
-    }
-
-    return query.next() && query.value(0).toInt() > 0;
-}
-
-bool DatabaseManager::registerUser(const QString &username, const QString &password)
-{
-    if (userExists(username)) {
-        qWarning() << "User already exists:" << username;
+    if(login.isEmpty() || password.isEmpty()) {
         return false;
     }
 
     QSqlQuery query;
-    QVariantMap params;
-    params[":username"] = username;
-    params[":password"] = password;
+    query.prepare("INSERT INTO users (login, password) VALUES (:login, :password)");
+    query.bindValue(":login", login);
+    query.bindValue(":password", password); // В реальном приложении нужно хэшировать пароль!
 
-    return executeQuery(query,
-                        "INSERT INTO users (username, password) VALUES (:username, :password)",
-                        params);
+    if(!query.exec()) {
+        qDebug() << "Register user error:" << query.lastError();
+        return false;
+    }
+
+    return true;
 }
 
-// bool DatabaseManager::loginUser(const QString &username, const QString &password)
-// {
-//     QSqlQuery query;
-//     query.prepare(
-//         "SELECT id, password FROM users "
-//         "WHERE username = :username"
-//         );
-//     query.bindValue(":username", username);
+bool Database::authenticateUser(const QString &login, const QString &password)
+{
+    QSqlQuery query;
+    query.prepare("SELECT password FROM users WHERE login = :login");
+    query.bindValue(":login", login);
 
-//     if (!executeQuery(query) || !query.next()) {
-//         return false;
-//     }
+    if(!query.exec()) {
+        qDebug() << "Authentication error:" << query.lastError();
+        return false;
+    }
 
-//     QString existPassword = query.value("password").toString();
+    if(query.next()) {
+        QString storedPassword = query.value(0).toString();
+        return (storedPassword == password); // В реальном приложении нужно сравнивать хэши
+    }
 
-//     return existPassword == password;
-// }
+    return false;
+}
 
-// UserProfile DatabaseManager::getUserProfile(int userId) const
-// {
-//     UserProfile profile;
-//     QSqlQuery query;
-//     query.prepare(
-//         "SELECT level, experience"
-//         "FROM user_profiles WHERE user_id = :user_id"
-//         );
-//     query.bindValue(":user_id", userId);
+int Database::getUserLevel(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT level FROM users WHERE login = :login");
+    query.bindValue(":login", login);
 
-//     if (executeQuery(query) && query.next()) {
-//         profile.level = query.value("level").toInt();
-//         profile.experience = query.value("experience").toInt();
-//     }
+    if(!query.exec()) {
+        qDebug() << "Get user level error:" << query.lastError();
+        return -1;
+    }
 
-//     return profile;
-// }
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
 
-// bool DatabaseManager::addUserExperience(int userId, int exp)
-// {
-//     UserProfile profile = getUserProfile(userId);
-//     profile.experience += exp;
+    return -1;
+}
 
-//     int expNeeded = profile.level * 100;
-//     if (profile.experience >= expNeeded) {
-//         profile.level++;
-//         profile.experience -= expNeeded;
-//     }
+int Database::getUserExp(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT exp FROM users WHERE login = :login");
+    query.bindValue(":login", login);
 
-//     return updateUserProfile(userId, profile);
-// }
+    if(!query.exec()) {
+        qDebug() << "Get user exp error:" << query.lastError();
+        return -1;
+    }
 
-// bool DatabaseManager::updateUserProfile(int userId, const UserProfile &profile)
-// {
-//     QSqlQuery query;
-//     query.prepare(
-//         "UPDATE user_profiles SET "
-//         "level = :level, "
-//         "experience = :exp, "
-//         "WHERE user_id = :user_id"
-//         );
-//     query.bindValue(":level", profile.level);
-//     query.bindValue(":exp", profile.experience);
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
 
-//     query.bindValue(":user_id", userId);
+    return -1;
+}
 
-//     return executeQuery(query);
-// }
+int Database::calculateExpForNextLevel(int currentLevel)
+{
+    // Формула для расчета необходимого опыта для следующего уровня
+    return static_cast<int>(BASE_EXP_REQUIRED * pow(EXP_GROWTH_RATE, currentLevel - 1));
+}
 
-// QVector<Achievement> DatabaseManager::getAchievements() const
-// {
-//     QVector<Achievement> achievements;
-//     QSqlQuery query("SELECT id, name, description FROM achievements");
+bool Database::addUserExp(const QString &login, int expToAdd)
+{
+    if(expToAdd <= 0) return false;
 
-//     while (query.next()) {
-//         Achievement a;
-//         a.id = query.value("id").toInt();
-//         a.name = query.value("name").toString();
-//         a.description = query.value("description").toString();
-//         achievements.append(a);
-//     }
+    // Получаем текущие данные пользователя
+    int currentExp = getUserExp(login);
+    int currentLevel = getUserLevel(login);
 
-//     return achievements;
-// }
+    if(currentExp == -1 || currentLevel == -1) return false;
 
-// QVector<Achievement> DatabaseManager::getUserAchievements(int userId) const
-// {
-//     QVector<Achievement> achievements;
-//     QSqlQuery query;
-//     query.prepare(
-//         "SELECT a.id, a.name, a.description "
-//         "FROM achievements a "
-//         "JOIN user_achievements ua ON a.id = ua.achievement_id "
-//         "WHERE ua.user_id = :user_id"
-//         );
-//     query.bindValue(":user_id", userId);
+    int newExp = currentExp + expToAdd;
+    int expNeeded = calculateExpForNextLevel(currentLevel);
 
-//     if (executeQuery(query)) {
-//         while (query.next()) {
-//             Achievement a;
-//             a.id = query.value("id").toInt();
-//             a.name = query.value("name").toString();
-//             a.description = query.value("description").toString();
-//             achievements.append(a);
-//         }
-//     }
+    QSqlQuery query;
+    query.prepare("UPDATE users SET exp = :exp WHERE login = :login");
+    query.bindValue(":exp", newExp);
+    query.bindValue(":login", login);
 
-//     return achievements;
-// }
+    if(!query.exec()) {
+        qDebug() << "Add exp error:" << query.lastError();
+        return false;
+    }
 
-// bool DatabaseManager::unlockAchievement(int userId, int achievementId)
-// {
-//     QSqlQuery query;
-//     query.prepare(
-//         "INSERT OR IGNORE INTO user_achievements (user_id, achievement_id) "
-//         "VALUES (:user_id, :achievement_id)"
-//         );
-//     query.bindValue(":user_id", userId);
-//     query.bindValue(":achievement_id", achievementId);
+    // Проверяем, не заработал ли пользователь достаточно опыта для нового уровня
+    if(newExp >= expNeeded) {
+        return levelUpUser(login);
+    }
 
-//     return executeQuery(query);
-// }
+    return true;
+}
 
+bool Database::levelUpUser(const QString &login)
+{
+    // Получаем текущий уровень
+    int currentLevel = getUserLevel(login);
+    if(currentLevel == -1) return false;
+
+    // Получаем текущий опыт
+    int currentExp = getUserExp(login);
+    if(currentExp == -1) return false;
+
+    // Рассчитываем оставшийся опыт после повышения уровня
+    int expNeeded = calculateExpForNextLevel(currentLevel);
+    int remainingExp = currentExp - expNeeded;
+
+    QSqlQuery query;
+    query.prepare("UPDATE users SET level = level + 1, exp = :exp WHERE login = :login");
+    query.bindValue(":exp", remainingExp);
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Level up error:" << query.lastError();
+        return false;
+    }
+
+    qDebug() << "User" << login << "leveled up to" << (currentLevel + 1);
+    return true;
+}

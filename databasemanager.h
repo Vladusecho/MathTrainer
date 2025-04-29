@@ -4,54 +4,37 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
-#include <QString>
-#include <QMutex>
-#include <QMutexLocker>
+#include <QSqlError>
+#include <QDebug>
 
-struct UserProfile {
-    int level;
-    int experience;
-};
-
-struct Achievement {
-    int id;
-    QString name;
-    QString description;
-};
-
-class DatabaseManager : public QObject
+class Database : public QObject
 {
     Q_OBJECT
 public:
-    static DatabaseManager& instance();
+    explicit Database(QObject *parent = nullptr);
+    ~Database();
 
-    explicit DatabaseManager(QObject *parent = nullptr);
-    ~DatabaseManager();
+    bool connectToDatabase();
+    bool createTables();
 
-    bool registerUser(const QString &username, const QString &password);
-    bool loginUser(const QString &login, const QString &password);
-    bool addUserExperience(int userId, int exp);
-    UserProfile getUserProfile(int userId) const;
-    bool updateUserProfile(int userId, const UserProfile &profile);
-    bool unlockAchievement(int userId, int achievementId);
-    void closeConnection();
+    // User management
+    bool registerUser(const QString &login, const QString &password);
+    bool authenticateUser(const QString &login, const QString &password);
 
-    QVector<Achievement> getAchievements() const;
-    QVector<Achievement> getUserAchievements(int userId) const;
+    int getUserLevel(const QString &login);
+    int getUserExp(const QString &login);
+    bool addUserExp(const QString &login, int expToAdd);
+    bool levelUpUser(const QString &login);
 
-    DatabaseManager(const DatabaseManager&) = delete;
-    DatabaseManager& operator=(const DatabaseManager&) = delete;
 private:
-    QSqlDatabase m_db;
-    mutable QMutex m_mutex;
-    QString m_connectionName;  // Храним уникальное имя соединения
+    QSqlDatabase db;
+    QString databaseName;
 
-    void initDatabase();
-    void createTables();
-    QSqlDatabase getDatabase() const;
-    bool executeQuery(QSqlQuery &query, const QString &queryStr, const QVariantMap &params = {}) const;
-    bool checkDatabase() const;
-    bool userExists(const QString &username) const;
+    // Level progression configuration
+    const int BASE_EXP_REQUIRED = 100; // EXP needed for level 1 to 2
+    const float EXP_GROWTH_RATE = 1.5f; // Each level requires this much more EXP than previous
+
+    int calculateExpForNextLevel(int currentLevel);
 };
 
 #endif // DATABASE_MANAGER_H

@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::RegisterDialog *ui;
-    DatabaseManager db;
+    Database db;
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
     bool checkPassword(QString password);
