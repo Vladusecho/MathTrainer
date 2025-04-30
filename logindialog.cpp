@@ -30,13 +30,13 @@ void LoginDialog::on_btn_to_start_clicked()
         showWarningMessage("Внимание!", "Пустые поля недопустимы.");
     } else if (login == "1" && password == "1") {
         showSuccessMessage("Ты в игре!");
-        closeEvent();
+        emit dialogClosed(ui->le_login->text(), ui->le_pass->text());
         LoginDialog::close();
     } else if (!db.authenticateUser(login, password)) {
-        showWarningMessage("Безуспешно.", "Пароль или логин не существует.");
+        showWarningMessage("Безуспешно.", "Проверьте правильность ввода логина и пароля.");
     } else if (db.authenticateUser(login, password)) {
         showSuccessMessage("Ты в игре!");
-        closeEvent();
+        emit dialogClosed(ui->le_login->text(), ui->le_pass->text());
         LoginDialog::close();
     }
 }
@@ -50,8 +50,8 @@ void LoginDialog::showWarningMessage(QString title, QString text)
     msg.setStandardButtons(QMessageBox::Ok);
     msg.setStyleSheet(
         "QMessageBox {background :rgb(170, 255, 255)}"
-        "QLabel {color:rgb(158, 79, 255); font-size: 22px}"
-        "QPushButton {color:rgb(158, 79, 255); background:rgb(120, 255, 192)}"
+        "QLabel {color:rgb(158, 79, 255); font-size: 22px; font-family: Segoe UI; font-weight: bold;}"
+        "QPushButton {color:rgb(158, 79, 255); background:rgb(120, 255, 192); font-family: Segoe UI; font-weight: bold; font-size: 22px;}"
         );
     msg.exec();
 }
@@ -65,15 +65,9 @@ void LoginDialog::showSuccessMessage(QString text)
     msg.setStandardButtons(QMessageBox::Ok);
     msg.setStyleSheet(
         "QMessageBox {background :rgb(170, 255, 255)}"
-        "QLabel {color:rgb(158, 79, 255); font-size: 22px}"
-        "QPushButton {color:rgb(158, 79, 255); background:rgb(120, 255, 192)}"
+        "QLabel {color:rgb(158, 79, 255); font-size: 22px; font-family: Segoe UI; font-weight: bold;}"
+        "QPushButton {color:rgb(158, 79, 255); background:rgb(120, 255, 192); font-family: Segoe UI; font-weight: bold; font-size: 22px;}"
         );
     msg.exec();
 }
-
-void LoginDialog::closeEvent()
-{
-    emit dialogClosed();
-}
-
 

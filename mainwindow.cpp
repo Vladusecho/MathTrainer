@@ -3,6 +3,7 @@
 #include "registerdialog.h"
 #include "logindialog.h"
 #include "aboutdialog.h"
+#include <QMessageBox>
 #include <QPropertyAnimation>
 
 
@@ -11,6 +12,25 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QLabel *author = new QLabel("Vladislav Korzun 2025");
+    author->setStyleSheet(
+        "color: rgb(158, 79, 255);"
+        "font-size: 16px;"
+        "font-family: Segoe UI;"
+        "font-weight: bold;"
+        "margin-right: 1px;"
+        );
+    statusBar()->addPermanentWidget(author);
+    statusBar()->setSizeGripEnabled(false);
+    statusBar()->setStyleSheet(
+        "QStatusBar {"
+        "color: rgb(158, 79, 255);"
+        "font-size: 16px;"
+        "font-family: Segoe UI;"
+        "font-weight: bold;"
+        "}"
+        );
 }
 
 
@@ -29,8 +49,9 @@ void MainWindow::on_btn_reg_clicked()
 void MainWindow::on_btn_login_clicked()
 {
     LoginDialog newWindow;
+    connect(&newWindow, &LoginDialog::dialogClosed,
+            this, &MainWindow::handleDialogClosed);
     newWindow.setModal(true);
-    connect(&newWindow, &LoginDialog::dialogClosed, this, &MainWindow::handleDialogClosed);
     newWindow.exec();
 }
 
@@ -94,10 +115,18 @@ void MainWindow::slideToIndex(QStackedWidget *stack, int newIndex)
     animNext->start();
 }
 
-void MainWindow::handleDialogClosed()
+void MainWindow::handleDialogClosed(const QString &username, const QString &password)
 {
     qDebug() << "Диалог закрыт, выполняем метод главного окна";
     this->slideToIndex(ui->mainStack, 1);
+    qDebug() << "Получены данные:";
+    qDebug() << "Логин:" << username;
+    qDebug() << "Пароль:" << password;
+    int userId = db.getUserIdByLogin(username);
+    int userLvl = db.getUserLevel(username);
+    int userExp = db.getUserExp(username);
+    user.setAll(userId, username, password, userLvl, userExp);
+    statusBar()->showMessage("Добро пожаловать, " + user.getNickname() + "!", 10000);
 }
 
 
@@ -121,12 +150,45 @@ void MainWindow::on_btn_exit_clicked()
 
 void MainWindow::on_btn_change_account_clicked()
 {
+    statusBar()->clearMessage();
     this->slideToIndex(ui->mainStack, 0);
 }
 
 
 void MainWindow::on_btn_exit_game_clicked()
 {
-    MainWindow::on_btn_exit_clicked();
+    QMessageBox msg;
+    msg.setIcon(QMessageBox::Warning);
+    msg.setText("Выход");
+    msg.setInformativeText("Вы действительно хотите выйти?");
+    QPushButton *no = msg.addButton("Нет!", QMessageBox::DestructiveRole);
+    QPushButton *yes = msg.addButton("Да:(", QMessageBox::AcceptRole);
+    msg.setStyleSheet(
+        "QMessageBox {background :rgb(170, 255, 255)}"
+        "QLabel {color:rgb(158, 79, 255); font-size: 22px; font-family: Segoe UI; font-weight: bold;}"
+        "QPushButton {color:rgb(158, 79, 255); background:rgb(120, 255, 192); font-family: Segoe UI; font-weight: bold; font-size: 22px;}"
+        );
+    msg.exec();
+    if (msg.clickedButton() == yes) {
+        MainWindow::on_btn_exit_clicked();
+    } else if (msg.clickedButton() == no) {
+        msg.close();
+    }
+}
+
+
+void MainWindow::on_btn_profile_clicked()
+{
+    ui->ll_nickname->setText(user.getNickname());
+    ui->ll_lvl->setNum(user.getLvl());
+    ui->ll_exp->setNum(user.getExp());
+    ui->ll_needed_exp->setNum(db.calculateExpForNextLevel(user.getLvl()));
+    this->slideToIndex(ui->mainStack, 2);
+}
+
+
+void MainWindow::on_btn_profile_back_clicked()
+{
+    this->slideToIndex(ui->mainStack, 1);
 }
 
