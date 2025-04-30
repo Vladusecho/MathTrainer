@@ -29,6 +29,13 @@ void MusicPlayer::playBackgroundMusic()
 }
 
 
+void MusicPlayer::playBackgroundGameMusic()
+{
+    player->setSource(QUrl("qrc:/music/game_music.wav"));
+    player->play();
+}
+
+
 void MusicPlayer::stopMusic()
 {
     player->stop();

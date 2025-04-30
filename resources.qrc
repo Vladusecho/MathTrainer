@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/music">
         <file>back_music.wav</file>
+        <file>game_music.wav</file>
     </qresource>
     <qresource prefix="/img">
         <file>music_on.svg</file>

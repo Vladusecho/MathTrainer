@@ -23,12 +23,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(MathTrainer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        registerdialog.h registerdialog.cpp registerdialog.ui
-        logindialog.h logindialog.cpp logindialog.ui
-        aboutdialog.h aboutdialog.cpp aboutdialog.ui
+
+
+
         databasemanager.h databasemanager.cpp
         resources.qrc
         musicplayer.h musicplayer.cpp
+        digitalbackground.h digitalbackground.cpp
 
 
 
