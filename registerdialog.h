@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "databasemanager.h"
+#include "digitalbackground.h"
 
 namespace Ui {
 class RegisterDialog;
@@ -23,6 +24,9 @@ private slots:
 private:
     Ui::RegisterDialog *ui;
     Database db;
+    QWidget *backgroundContainer;
+    DigitalBackground *digitalBg;
+
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
     bool checkPassword(QString password);

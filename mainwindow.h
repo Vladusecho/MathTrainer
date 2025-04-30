@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "databasemanager.h"
+#include "digitalbackground.h"
 #include "musicplayer.h"
 
 QT_BEGIN_NAMESPACE
@@ -112,6 +113,8 @@ private:
     User user;
     Database db;
     MusicPlayer musicPlayer;
+    QWidget *backgroundContainer;
+    DigitalBackground *digitalBg;
 
     template<typename T>
     void createDialog(T dialogType);

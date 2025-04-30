@@ -29,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         databasemanager.h databasemanager.cpp
         resources.qrc
         musicplayer.h musicplayer.cpp
+        digitalbackground.h digitalbackground.cpp
 
 
 

@@ -39,17 +39,23 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>120</y>
+     <y>1</y>
      <width>601</width>
-     <height>162</height>
+     <height>461</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout_login">
     <property name="leftMargin">
+     <number>100</number>
+    </property>
+    <property name="topMargin">
      <number>100</number>
     </property>
     <property name="rightMargin">
      <number>100</number>
+    </property>
+    <property name="bottomMargin">
+     <number>200</number>
     </property>
     <item>
      <layout class="QFormLayout" name="formLayout">

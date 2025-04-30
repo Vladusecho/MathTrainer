@@ -38,18 +38,24 @@
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>90</y>
-     <width>601</width>
-     <height>217</height>
+     <x>30</x>
+     <y>-4</y>
+     <width>571</width>
+     <height>415</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout_reg">
     <property name="leftMargin">
      <number>50</number>
     </property>
+    <property name="topMargin">
+     <number>100</number>
+    </property>
     <property name="rightMargin">
      <number>50</number>
+    </property>
+    <property name="bottomMargin">
+     <number>100</number>
     </property>
     <item>
      <layout class="QFormLayout" name="formLayout">

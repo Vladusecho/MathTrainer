@@ -3,6 +3,7 @@
 #include "QMessageBox"
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+#include <QStackedLayout>
 
 RegisterDialog::RegisterDialog(QWidget *parent)
     : QDialog(parent)

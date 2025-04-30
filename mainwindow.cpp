@@ -3,10 +3,12 @@
 #include "registerdialog.h"
 #include "logindialog.h"
 #include "aboutdialog.h"
+#include "digitalbackground.h"
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QMediaPlayer>
+#include <QStackedLayout>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -38,6 +40,27 @@ MainWindow::MainWindow(QWidget *parent)
         );
 
     updateSoundButtonIcon();
+
+    // 1. Создаем контейнер для фона
+    backgroundContainer = new QWidget(this);
+    backgroundContainer->setStyleSheet("background: transparent;");
+
+    // 2. Создаем анимированный фон
+    digitalBg = new DigitalBackground(backgroundContainer);
+    digitalBg->setDigitColors({Qt::cyan, Qt::green, Qt::white});
+    digitalBg->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    ui->mainStack->setParent(backgroundContainer);
+
+    QStackedLayout* stackLayout = new QStackedLayout(backgroundContainer);
+    stackLayout->setStackingMode(QStackedLayout::StackAll);
+
+    stackLayout->addWidget(ui->mainStack); // Затем стек
+    stackLayout->addWidget(digitalBg);      // Сначала фон
+
+    // 5. Заменяем центральный виджет (или там где у вас был стек)
+    setCentralWidget(backgroundContainer);
+
 }
 
 
