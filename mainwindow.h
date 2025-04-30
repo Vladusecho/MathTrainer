@@ -108,6 +108,22 @@ private slots:
 
     void on_verticalSlider_2_valueChanged(int value);
 
+    void on_btn_back_reg_clicked();
+
+    void on_btn_to_reg_clicked();
+
+    void on_btn_to_start_clicked();
+
+    void on_btn_back_login_clicked();
+
+    void on_btn_back_about_clicked();
+
+    void on_btn_back_lvl_clicked();
+
+    void on_btn_select_easy_clicked();
+
+    void on_btn_select_lvl_clicked();
+
 private:
     Ui::MainWindow *ui;
     User user;
@@ -124,5 +140,10 @@ private:
     void handleDialogClosed(const QString &username, const QString &password);
 
     bool updatingSliders = false;
+
+    void showWarningMessage(QString title, QString text);
+    void showSuccessMessage(QString text);
+    bool checkPassword(QString password);
+    bool checkLogin(QString login);
 };
 #endif // MAINWINDOW_H

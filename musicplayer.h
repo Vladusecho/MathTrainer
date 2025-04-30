@@ -13,6 +13,7 @@ public:
     ~MusicPlayer();
 
     void playBackgroundMusic();
+    void playBackgroundGameMusic();
     void stopMusic();
     void setVolume(int volume);
     int volume() const;

@@ -38,10 +38,10 @@
    <widget class="QStackedWidget" name="mainStack">
     <property name="geometry">
      <rect>
-      <x>9</x>
-      <y>9</y>
+      <x>10</x>
+      <y>0</y>
       <width>581</width>
-      <height>361</height>
+      <height>371</height>
      </rect>
     </property>
     <widget class="QWidget" name="main">
@@ -49,7 +49,7 @@
       <property name="geometry">
        <rect>
         <x>100</x>
-        <y>100</y>
+        <y>110</y>
         <width>381</width>
         <height>231</height>
        </rect>
@@ -190,9 +190,9 @@ background:rgb(120, 255, 192)</string>
      <widget class="QLabel" name="mainNameGame">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>40</y>
-        <width>432</width>
+        <x>71</x>
+        <y>50</y>
+        <width>441</width>
         <height>46</height>
        </rect>
       </property>
@@ -259,9 +259,9 @@ background:rgb(120, 255, 192)</string>
      <widget class="QLabel" name="ll_main_menu">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>40</y>
-        <width>432</width>
+        <x>71</x>
+        <y>51</y>
+        <width>441</width>
         <height>46</height>
        </rect>
       </property>
@@ -292,7 +292,7 @@ background:rgb(120, 255, 192)</string>
       <property name="geometry">
        <rect>
         <x>99</x>
-        <y>99</y>
+        <y>110</y>
         <width>381</width>
         <height>231</height>
        </rect>
@@ -461,6 +461,9 @@ background:rgb(120, 255, 192)</string>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::NoFocus</enum>
+      </property>
       <property name="maximum">
        <number>100</number>
       </property>
@@ -509,7 +512,7 @@ background:rgb(120, 255, 192)</string>
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>280</y>
+        <y>260</y>
         <width>201</width>
         <height>43</height>
        </rect>
@@ -539,7 +542,7 @@ background:rgb(120, 255, 192)</string>
 background:rgb(120, 255, 192)</string>
       </property>
       <property name="text">
-       <string>Изменить никнейм</string>
+       <string>Изменить ник</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>
@@ -551,9 +554,9 @@ background:rgb(120, 255, 192)</string>
      <widget class="QPushButton" name="btn_profile_back">
       <property name="geometry">
        <rect>
-        <x>309</x>
-        <y>279</y>
-        <width>201</width>
+        <x>190</x>
+        <y>310</y>
+        <width>211</width>
         <height>43</height>
        </rect>
       </property>
@@ -594,7 +597,7 @@ background:rgb(120, 255, 192)</string>
         <x>53</x>
         <y>89</y>
         <width>481</width>
-        <height>181</height>
+        <height>161</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -768,6 +771,661 @@ background:rgb(120, 255, 192)</string>
          </property>
          <property name="text">
           <string>exp.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QPushButton" name="btn_stats">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>260</y>
+        <width>201</width>
+        <height>43</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>16</pointsize>
+        <bold>true</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+      </property>
+      <property name="text">
+       <string>Статистика</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="register_page">
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>70</y>
+        <width>461</width>
+        <height>215</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout">
+       <property name="rowWrapPolicy">
+        <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
+       </property>
+       <property name="labelAlignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+       <property name="formAlignment">
+        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>Логин:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>Пароль:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="le_login_reg">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="placeholderText">
+          <string>user42</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="le_pass_reg">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="placeholderText">
+          <string>Tralaler0!</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_6">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>Повтор пароля:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="le_repeat_pass_reg">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="placeholderText">
+          <string>Tralaler0!</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QPushButton" name="btn_to_reg">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Регистрация</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QPushButton" name="btn_back_reg">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Назад</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="login_page">
+     <widget class="QWidget" name="layoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>100</y>
+        <width>425</width>
+        <height>160</height>
+       </rect>
+      </property>
+      <layout class="QFormLayout" name="formLayout_2">
+       <property name="labelAlignment">
+        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       </property>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="le_login_login">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="placeholderText">
+          <string>user42</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_10">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>Пароль:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="le_pass_login">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="placeholderText">
+          <string>Tralaler0!</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QPushButton" name="btn_back_login">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Назад</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QPushButton" name="btn_to_start">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Вперед в игру!</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>Логин:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="about_page">
+     <widget class="QPushButton" name="btn_back_about">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>300</y>
+        <width>131</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>22</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+      </property>
+      <property name="text">
+       <string>Назад</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="mainNameGame_2">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>30</y>
+        <width>432</width>
+        <height>46</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>25</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255)</string>
+      </property>
+      <property name="text">
+       <string>Математический тренажёр</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_12">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>90</y>
+        <width>541</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>13</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255)</string>
+      </property>
+      <property name="text">
+       <string>Эта прекрасная игра, сделанная с огромной любовью, на великолепном языке С++, поможет вам развить свои навыки в вычислении самых сложных примеров! Ваш IQ вырастет в геометрической прогрессии, если Вы будете решать данные примеры каждый день, поэтому можно с уверенностью заявить, что вы поступите в Оксфордский Университет. А изумительный дизайн будет радовать ваши глаза абсолютно всегда!</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="select_lvl_page">
+     <widget class="QLabel" name="ll_main_menu_3">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>50</y>
+        <width>432</width>
+        <height>46</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>25</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255)</string>
+      </property>
+      <property name="text">
+       <string>Уровни сложности</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>109</x>
+        <y>109</y>
+        <width>381</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="btn_select_easy">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>19</pointsize>
+           <bold>true</bold>
+           <stylestrategy>PreferDefault</stylestrategy>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Легкий</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_select_medium">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>19</pointsize>
+           <bold>true</bold>
+           <stylestrategy>PreferDefault</stylestrategy>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Средний</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_select_hard">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>19</pointsize>
+           <bold>true</bold>
+           <stylestrategy>PreferDefault</stylestrategy>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Сложный</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_back_lvl">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>19</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+         </property>
+         <property name="text">
+          <string>Назад</string>
+         </property>
+         <property name="autoDefault">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
