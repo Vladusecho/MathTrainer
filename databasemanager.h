@@ -18,6 +18,8 @@ public:
     bool createTables();
 
     // User management
+    bool isLoginExists(const QString &login);
+    int getUserIdByLogin(const QString &login);
     bool registerUser(const QString &login, const QString &password);
     bool authenticateUser(const QString &login, const QString &password);
 
@@ -26,15 +28,15 @@ public:
     bool addUserExp(const QString &login, int expToAdd);
     bool levelUpUser(const QString &login);
 
+    int calculateExpForNextLevel(int currentLevel);
+
 private:
     QSqlDatabase db;
     QString databaseName;
 
-    // Level progression configuration
-    const int BASE_EXP_REQUIRED = 100; // EXP needed for level 1 to 2
-    const float EXP_GROWTH_RATE = 1.5f; // Each level requires this much more EXP than previous
+    const int BASE_EXP_REQUIRED = 100;
+    const float EXP_GROWTH_RATE = 1.5f;
 
-    int calculateExpForNextLevel(int currentLevel);
 };
 
 #endif // DATABASE_MANAGER_H

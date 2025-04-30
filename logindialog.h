@@ -27,6 +27,9 @@ private:
 
     void showWarningMessage(QString title, QString text);
     void showSuccessMessage(QString text);
+
+signals:
+    void dialogClosed(const QString &username, const QString &password);
 };
 
 #endif // LOGINDIALOG_H

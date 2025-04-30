@@ -49,6 +49,42 @@ bool Database::createTables()
     return true;
 }
 
+bool Database::isLoginExists(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Check login exists error:" << query.lastError();
+        return false;
+    }
+
+    if(query.next()) {
+        return query.value(0).toInt() > 0;
+    }
+
+    return false;
+}
+
+int Database::getUserIdByLogin(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT id FROM users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Get user ID error:" << query.lastError();
+        return -1;
+    }
+
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
+
+    return -1;
+}
+
 bool Database::registerUser(const QString &login, const QString &password)
 {
     if(login.isEmpty() || password.isEmpty()) {
