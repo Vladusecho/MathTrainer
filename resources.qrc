@@ -1,1 +1,9 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/music">
+        <file>back_music.wav</file>
+    </qresource>
+    <qresource prefix="/img">
+        <file>music_on.svg</file>
+        <file>music_off.svg</file>
+    </qresource>
+</RCC>

@@ -3,8 +3,10 @@
 #include "registerdialog.h"
 #include "logindialog.h"
 #include "aboutdialog.h"
+#include <QFileInfo>
 #include <QMessageBox>
 #include <QPropertyAnimation>
+#include <QMediaPlayer>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,6 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    musicPlayer.playBackgroundMusic();
+    musicPlayer.setVolume(50);
 
     QLabel *author = new QLabel("Vladislav Korzun 2025");
     author->setStyleSheet(
@@ -31,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
         "font-weight: bold;"
         "}"
         );
+
+    updateSoundButtonIcon();
 }
 
 
@@ -63,18 +70,14 @@ void MainWindow::on_btn_about_clicked()
 
 void MainWindow::slideToIndex(QStackedWidget *stack, int newIndex)
 {
-    // Проверка на валидность индекса
     if (newIndex < 0 || newIndex >= stack->count())
         return;
 
-    // Текущий и следующий виджеты
     QWidget *currentWidget = stack->currentWidget();
     QWidget *nextWidget = stack->widget(newIndex);
 
-    // Определяем направление анимации
-    bool slideToRight = (newIndex < stack->currentIndex()); // назад
+    bool slideToRight = (newIndex < stack->currentIndex());
 
-    // Позиционируем следующий виджет
     int offsetX = currentWidget->width();
     nextWidget->setGeometry(
         slideToRight ? -offsetX : offsetX,
@@ -128,7 +131,6 @@ void MainWindow::handleDialogClosed(const QString &username, const QString &pass
     user.setAll(userId, username, password, userLvl, userExp);
     statusBar()->showMessage("Добро пожаловать, " + user.getNickname() + "!", 10000);
 }
-
 
 template<typename T>
 void MainWindow::createDialog(T dialogType)
@@ -190,5 +192,86 @@ void MainWindow::on_btn_profile_clicked()
 void MainWindow::on_btn_profile_back_clicked()
 {
     this->slideToIndex(ui->mainStack, 1);
+}
+
+
+void MainWindow::on_btn_sound_clicked()
+{
+    musicPlayer.toggleMute();
+    updateSoundButtonIcon();
+
+    if (musicPlayer.isMuted()) {
+        ui->verticalSlider->setValue(0);
+        ui->verticalSlider_2->setValue(0);
+    } else {
+        ui->verticalSlider->setValue(musicPlayer.volume());
+        ui->verticalSlider_2->setValue(musicPlayer.volume());
+    }
+}
+
+void MainWindow::updateSoundButtonIcon() {
+    int currentVolume = musicPlayer.volume();
+    bool isActuallyMuted = musicPlayer.isMuted() || currentVolume == 0;
+
+    QString iconPath = isActuallyMuted
+    ? ":/img/music_off.svg"
+    : ":/img/music_on.svg";
+
+    QIcon icon(iconPath);
+    ui->btn_sound->setIcon(icon);
+    ui->btn_sound->setIconSize(QSize(32, 32));
+    ui->btn_sound_2->setIcon(icon);
+    ui->btn_sound_2->setIconSize(QSize(32, 32));
+}
+
+void MainWindow::on_btn_sound_2_clicked()
+{
+    MainWindow::on_btn_sound_clicked();
+}
+
+
+void MainWindow::on_verticalSlider_valueChanged(int value)
+{
+    if (!updatingSliders) {
+        updatingSliders = true;
+        musicPlayer.setVolume(value);
+        ui->verticalSlider_2->setValue(value);  // Синхронизируем второй ползунок
+        updatingSliders = false;
+    }
+
+    if (value == 0 && !musicPlayer.isMuted()) {
+        musicPlayer.toggleMute();
+    }
+
+    else if (value > 0 && musicPlayer.isMuted()) {
+        musicPlayer.toggleMute();
+    }
+
+    updateSoundButtonIcon();
+
+    statusBar()->showMessage(QString("Громкость: %1%").arg(value), 1000);
+}
+
+
+void MainWindow::on_verticalSlider_2_valueChanged(int value)
+{
+    if (!updatingSliders) {
+        updatingSliders = true;
+        musicPlayer.setVolume(value);
+        ui->verticalSlider->setValue(value);  // Синхронизируем первый ползунок
+        updatingSliders = false;
+    }
+
+    if (value == 0 && !musicPlayer.isMuted()) {
+        musicPlayer.toggleMute();
+    }
+
+    else if (value > 0 && musicPlayer.isMuted()) {
+        musicPlayer.toggleMute();
+    }
+
+    updateSoundButtonIcon();
+
+    statusBar()->showMessage(QString("Громкость: %1%").arg(value), 1000);
 }
 

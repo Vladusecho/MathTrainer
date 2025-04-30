@@ -48,41 +48,15 @@
      <widget class="QWidget" name="gridLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>-10</x>
-        <y>0</y>
-        <width>601</width>
-        <height>351</height>
+        <x>100</x>
+        <y>100</y>
+        <width>381</width>
+        <height>231</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="1" column="0">
-        <widget class="QLabel" name="mainNameGame">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="font">
-          <font>
-           <family>Comic Sans MS</family>
-           <pointsize>25</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color:rgb(158, 79, 255)</string>
-         </property>
-         <property name="text">
-          <string>Математический тренажёр</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QPushButton" name="btn_exit">
+       <item row="2" column="0">
+        <widget class="QPushButton" name="btn_about">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -107,14 +81,14 @@
 background:rgb(120, 255, 192)</string>
          </property>
          <property name="text">
-          <string>Выход</string>
+          <string>Об игре</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="0" column="0">
         <widget class="QPushButton" name="btn_login">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -148,20 +122,7 @@ background:rgb(120, 255, 192)</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
+       <item row="1" column="0">
         <widget class="QPushButton" name="btn_reg">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
@@ -191,21 +152,8 @@ background:rgb(120, 255, 192)</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QPushButton" name="btn_about">
+       <item row="3" column="0">
+        <widget class="QPushButton" name="btn_exit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
            <horstretch>0</horstretch>
@@ -230,7 +178,7 @@ background:rgb(120, 255, 192)</string>
 background:rgb(120, 255, 192)</string>
          </property>
          <property name="text">
-          <string>Об игре</string>
+          <string>Выход</string>
          </property>
          <property name="autoDefault">
           <bool>false</bool>
@@ -238,6 +186,73 @@ background:rgb(120, 255, 192)</string>
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QLabel" name="mainNameGame">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>40</y>
+        <width>432</width>
+        <height>46</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>25</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255)</string>
+      </property>
+      <property name="text">
+       <string>Математический тренажёр</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_sound">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>290</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>149</y>
+        <width>20</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="sliderPosition">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="game">
@@ -276,9 +291,9 @@ background:rgb(120, 255, 192)</string>
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>109</x>
+        <x>99</x>
         <y>99</y>
-        <width>371</width>
+        <width>381</width>
         <height>231</height>
        </rect>
       </property>
@@ -420,6 +435,41 @@ background:rgb(120, 255, 192)</string>
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QPushButton" name="btn_sound_2">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>290</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QSlider" name="verticalSlider_2">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>150</y>
+        <width>20</width>
+        <height>131</height>
+       </rect>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="maximum">
+       <number>100</number>
+      </property>
+      <property name="sliderPosition">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="profile">
@@ -635,23 +685,6 @@ background:rgb(120, 255, 192)</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_5">
-         <property name="font">
-          <font>
-           <family>Comic Sans MS</family>
-           <pointsize>22</pointsize>
-           <bold>true</bold>
-          </font>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">color:rgb(158, 79, 255)</string>
-         </property>
-         <property name="text">
-          <string>До нового:</string>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="4">
         <widget class="QLabel" name="label_9">
          <property name="font">
@@ -687,7 +720,24 @@ background:rgb(120, 255, 192)</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="2" column="0" colspan="2">
+        <widget class="QLabel" name="label_5">
+         <property name="font">
+          <font>
+           <family>Comic Sans MS</family>
+           <pointsize>22</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color:rgb(158, 79, 255)</string>
+         </property>
+         <property name="text">
+          <string>До нового уровня:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2">
         <widget class="QLabel" name="ll_needed_exp">
          <property name="font">
           <font>
@@ -704,7 +754,7 @@ background:rgb(120, 255, 192)</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2" colspan="3">
+       <item row="2" column="3" colspan="2">
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
