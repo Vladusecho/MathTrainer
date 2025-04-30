@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "databasemanager.h"
+#include "musicplayer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -98,15 +99,27 @@ private slots:
 
     void on_btn_profile_back_clicked();
 
+    void on_btn_sound_clicked();
+
+    void on_btn_sound_2_clicked();
+
+    void on_verticalSlider_valueChanged(int value);
+
+    void on_verticalSlider_2_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
     User user;
     Database db;
+    MusicPlayer musicPlayer;
 
     template<typename T>
     void createDialog(T dialogType);
+    void updateSoundButtonIcon();
 
     void slideToIndex(QStackedWidget *stack, int newIndex);
     void handleDialogClosed(const QString &username, const QString &password);
+
+    bool updatingSliders = false;
 };
 #endif // MAINWINDOW_H
