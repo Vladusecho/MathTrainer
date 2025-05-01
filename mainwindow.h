@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include "databasemanager.h"
 #include "digitalbackground.h"
+#include "gamelogic.h"
 #include "musicplayer.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,12 +21,22 @@ private:
     QString password;
     int lvl;
     int exp;
+    int easy;
+    int medium;
+    int hard;
+
+    const int BASE_EXP_REQUIRED = 30;
+    const float EXP_GROWTH_RATE = 1.5f;
+
 public:
 
     User() {
         this->id = -1;
         this->exp = 0;
         this->lvl = 0;
+        this->easy = 0;
+        this->medium = 0;
+        this->hard = 0;
         this->nickname = "Unknown";
         this->password = "0000";
     }
@@ -50,6 +61,30 @@ public:
         this->id = id;
     }
 
+    int getEasy() {
+        return this->easy;
+    }
+
+    int getMedium() {
+        return this->medium;
+    }
+
+    int getHard() {
+        return this->hard;
+    }
+
+    void setMedium(int medium) {
+        this->medium = medium;
+    }
+
+    void setEasy(int easy) {
+        this->easy = easy;
+    }
+
+    void setHard(int hard) {
+        this->hard = hard;
+    }
+
     void setNickname(QString nickname) {
         this->nickname = nickname;
     }
@@ -58,16 +93,40 @@ public:
         this->lvl = lvl;
     }
 
-    void setExp(int exp) {
-        this->exp = exp;
+    void addExp(int addedExp) {
+        this->exp = this->exp + addedExp;
+        int expNeeded = calculateExpForNextLevel(this->lvl);
+        if(this->exp >= expNeeded) {
+            levelUpUser();
+        }
     }
 
-    void setAll(int id, QString nick, QString password, int lvl, int exp) {
+    void levelUpUser() {
+        int expNeeded = calculateExpForNextLevel(this->lvl);
+        int remainingExp = abs(this->exp - expNeeded);
+        this->exp = remainingExp;
+        this->lvl++;
+    }
+
+    void setAll(int id, QString nick, QString password, int lvl, int exp, int easy, int medium, int hard) {
         this->id = id;
         this->exp = exp;
         this->lvl = lvl;
         this->nickname = nick;
         this->password = password;
+        this->easy = easy;
+        this->medium = medium;
+        this->hard = hard;
+    }
+
+    int calculateExpForNextLevel(int currentLevel) {
+        return static_cast<int>(BASE_EXP_REQUIRED * pow(EXP_GROWTH_RATE, currentLevel - 1));
+    }
+
+    int getRemainingExp() {
+        int expNeeded = calculateExpForNextLevel(this->lvl);
+        int remainingExp = abs(this->exp - expNeeded);
+        return remainingExp;
     }
 
     User clear() {
@@ -124,6 +183,18 @@ private slots:
 
     void on_btn_select_lvl_clicked();
 
+    void on_btn_back_game_clicked();
+
+    void on_btn_back_finish_clicked();
+
+    void on_btn_back_stat_clicked();
+
+    void on_btn_stats_clicked();
+
+    void on_btn_select_medium_clicked();
+
+    void on_btn_select_hard_clicked();
+
 private:
     Ui::MainWindow *ui;
     User user;
@@ -131,6 +202,7 @@ private:
     MusicPlayer musicPlayer;
     QWidget *backgroundContainer;
     DigitalBackground *digitalBg;
+    GameLogic *gameLogic;
 
     template<typename T>
     void createDialog(T dialogType);

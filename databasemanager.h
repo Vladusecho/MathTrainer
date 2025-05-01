@@ -25,7 +25,13 @@ public:
 
     int getUserLevel(const QString &login);
     int getUserExp(const QString &login);
+    int getUserHard(const QString &login);
+    int getUserMedium(const QString &login);
+    int getUserEasy(const QString &login);
     bool addUserExp(const QString &login, int expToAdd);
+    bool addUserEasy(const QString &login, int easy);
+    bool addUserMedium(const QString &login, int medium);
+    bool addUserHard(const QString &login, int hard);
     bool levelUpUser(const QString &login);
 
     int calculateExpForNextLevel(int currentLevel);
@@ -34,7 +40,7 @@ private:
     QSqlDatabase db;
     QString databaseName;
 
-    const int BASE_EXP_REQUIRED = 100;
+    const int BASE_EXP_REQUIRED = 30;
     const float EXP_GROWTH_RATE = 1.5f;
 
 };
