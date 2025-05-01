@@ -39,7 +39,10 @@ bool Database::createTables()
                               "login TEXT UNIQUE NOT NULL, "
                               "password TEXT NOT NULL, "
                               "level INTEGER DEFAULT 1, "
-                              "exp INTEGER DEFAULT 0)");
+                              "exp INTEGER DEFAULT 0, "
+                              "easy INTEGER DEFAULT 0, "
+                              "medium INTEGER DEFAULT 0, "
+                              "hard INTEGER DEFAULT 0)");
 
     if(!success) {
         qDebug() << "Error creating tables:" << query.lastError();
@@ -159,6 +162,60 @@ int Database::getUserExp(const QString &login)
     return -1;
 }
 
+int Database::getUserEasy(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT easy FROM users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Get user easy error:" << query.lastError();
+        return -1;
+    }
+
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
+
+    return -1;
+}
+
+int Database::getUserMedium(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT medium FROM users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Get user easy error:" << query.lastError();
+        return -1;
+    }
+
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
+
+    return -1;
+}
+
+int Database::getUserHard(const QString &login)
+{
+    QSqlQuery query;
+    query.prepare("SELECT hard FROM users WHERE login = :login");
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Get user easy error:" << query.lastError();
+        return -1;
+    }
+
+    if(query.next()) {
+        return query.value(0).toInt();
+    }
+
+    return -1;
+}
+
 int Database::calculateExpForNextLevel(int currentLevel)
 {
     // Формула для расчета необходимого опыта для следующего уровня
@@ -193,6 +250,69 @@ bool Database::addUserExp(const QString &login, int expToAdd)
         return levelUpUser(login);
     }
 
+    return true;
+}
+
+bool Database::addUserEasy(const QString &login, int easy)
+{
+    if(easy <= 0) return false;
+
+    // Получаем текущие данные пользователя
+    int currentEasy = getUserEasy(login);
+
+    if (easy <= currentEasy) return false;
+
+    QSqlQuery query;
+    query.prepare("UPDATE users SET easy = :easy WHERE login = :login");
+    query.bindValue(":easy", easy);
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Add easy error:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+bool Database::addUserMedium(const QString &login, int medium)
+{
+    if(medium <= 0) return false;
+
+    // Получаем текущие данные пользователя
+    int currentMedium = getUserMedium(login);
+
+    if (medium <= currentMedium) return false;
+
+    QSqlQuery query;
+    query.prepare("UPDATE users SET medium = :medium WHERE login = :login");
+    query.bindValue(":medium", medium);
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Add medium error:" << query.lastError();
+        return false;
+    }
+    return true;
+}
+
+bool Database::addUserHard(const QString &login, int hard)
+{
+    if(hard <= 0) return false;
+
+    // Получаем текущие данные пользователя
+    int currentHard = getUserHard(login);
+
+    if (hard <= currentHard) return false;
+
+    QSqlQuery query;
+    query.prepare("UPDATE users SET hard = :hard WHERE login = :login");
+    query.bindValue(":hard", hard);
+    query.bindValue(":login", login);
+
+    if(!query.exec()) {
+        qDebug() << "Add hard error:" << query.lastError();
+        return false;
+    }
     return true;
 }
 

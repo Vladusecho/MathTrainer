@@ -30,6 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources.qrc
         musicplayer.h musicplayer.cpp
         digitalbackground.h digitalbackground.cpp
+        gamelogic.h gamelogic.cpp
 
 
 

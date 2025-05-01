@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <QStackedLayout>
 #include <QRegularExpression>
+#include "mathtrainer.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -62,6 +63,68 @@ MainWindow::MainWindow(QWidget *parent)
         button->setFocusPolicy(Qt::NoFocus);
         button->setStyleSheet("QPushButton { outline: none; color:rgb(158, 79, 255); background:rgb(120, 255, 192)}");
     }
+
+    gameLogic = new GameLogic(this);
+
+    // connect(ui->mediumButton, &QPushButton::clicked, [this]() {
+    //     m_gameLogic->startGame(GameLogic::Medium);
+    // });
+    // connect(ui->hardButton, &QPushButton::clicked, [this]() {
+    //     m_gameLogic->startGame(GameLogic::Hard);
+    // });
+
+    // Подключение игровой логики
+    connect(gameLogic, &GameLogic::newProblemGenerated, this, [this](const QString &problem) {
+
+        ui->ll_question->setText(problem);
+    });
+
+    connect(gameLogic, &GameLogic::timeUpdated, this, [this](const QString &time) {
+        ui->ll_timer->setText(time);
+    });
+
+    connect(gameLogic, &GameLogic::gameFinished, this, [this](int score, int incorrect, GameLogic::Difficulty diff) {
+        musicPlayer.stopMusic();
+        musicPlayer.playBackgroundMusic();
+        this->slideToIndex(ui->mainStack, 8);
+        ui->ll_correct_answers->setNum(score);
+        ui->ll_incorrect_answers->setNum(incorrect);
+        int exp = 0;
+        if (score - incorrect > 0) exp = score - incorrect;
+        switch (diff) {
+        case GameLogic::Easy:
+            ui->ll_added_exp->setNum(exp);
+            user.addExp(exp);
+            db.addUserExp(user.getNickname(), exp);
+            db.addUserEasy(user.getNickname(), score);
+            if (score > user.getEasy()) {
+                user.setEasy(score);
+            }
+            break;
+        case GameLogic::Medium:
+            ui->ll_added_exp->setNum(exp * 2);
+            user.addExp(exp * 2);
+            db.addUserExp(user.getNickname(), exp * 2);
+            db.addUserMedium(user.getNickname(), score);
+            if (score > user.getMedium()) {
+                user.setMedium(score);
+            }
+            break;
+        case GameLogic::Hard:
+            ui->ll_added_exp->setNum(exp * 5);
+            user.addExp(exp * 5);
+            db.addUserExp(user.getNickname(), exp * 5);
+            db.addUserHard(user.getNickname(), score);
+            if (score > user.getHard()) {
+                user.setHard(score);
+            }
+            break;
+        }
+    });
+
+    connect(ui->le_answer, &QLineEdit::returnPressed, this, [this](){
+        gameLogic->checkAnswer(ui->le_answer);
+    });
 }
 
 
@@ -80,6 +143,7 @@ void MainWindow::on_btn_reg_clicked()
 void MainWindow::on_btn_login_clicked()
 {
     this->slideToIndex(ui->mainStack, 4);
+    ui->le_login_login->setFocus();
 }
 
 
@@ -155,7 +219,10 @@ void MainWindow::handleDialogClosed(const QString &username, const QString &pass
     int userId = db.getUserIdByLogin(username);
     int userLvl = db.getUserLevel(username);
     int userExp = db.getUserExp(username);
-    user.setAll(userId, username, password, userLvl, userExp);
+    int userEasy = db.getUserEasy(username);
+    int userMedium = db.getUserMedium(username);
+    int userHard = db.getUserHard(username);
+    user.setAll(userId, username, password, userLvl, userExp, userEasy, userMedium, userHard);
     statusBar()->showMessage("Добро пожаловать, " + user.getNickname() + "!", 10000);
 }
 
@@ -194,7 +261,7 @@ void MainWindow::on_btn_profile_clicked()
     ui->ll_nickname->setText(user.getNickname());
     ui->ll_lvl->setNum(user.getLvl());
     ui->ll_exp->setNum(user.getExp());
-    ui->ll_needed_exp->setNum(db.calculateExpForNextLevel(user.getLvl()));
+    ui->ll_needed_exp->setNum(user.getRemainingExp());
     this->slideToIndex(ui->mainStack, 2);
 }
 
@@ -321,6 +388,8 @@ void MainWindow::on_btn_to_reg_clicked()
     else if (db.registerUser(login, password)){
         showSuccessMessage("Регистрация завершена!");
         MainWindow::on_btn_back_reg_clicked();
+        ui->le_login_login->setText(login);
+        ui->le_pass_login->setText(password);
     }
 }
 
@@ -422,11 +491,61 @@ void MainWindow::on_btn_select_easy_clicked()
 {
     musicPlayer.stopMusic();
     musicPlayer.playBackgroundGameMusic();
+    gameLogic->startGame(GameLogic::Easy);
+    this->slideToIndex(ui->mainStack, 7);
 }
 
 
 void MainWindow::on_btn_select_lvl_clicked()
 {
     this->slideToIndex(ui->mainStack, 6);
+}
+
+
+void MainWindow::on_btn_back_game_clicked()
+{
+    musicPlayer.stopMusic();
+    musicPlayer.playBackgroundMusic();
+    gameLogic->endGameFromBack();
+    MainWindow::on_btn_select_lvl_clicked();
+}
+
+
+void MainWindow::on_btn_back_finish_clicked()
+{
+    MainWindow::on_btn_select_lvl_clicked();
+}
+
+
+void MainWindow::on_btn_stats_clicked()
+{
+    ui->ll_easy_stat->setNum(user.getEasy());
+    ui->ll_medium_stat->setNum(user.getMedium());
+    ui->ll_hard_stat->setNum(user.getHard());
+    this->slideToIndex(ui->mainStack, 9);
+}
+
+
+void MainWindow::on_btn_back_stat_clicked()
+{
+    this->slideToIndex(ui->mainStack, 2);
+}
+
+
+void MainWindow::on_btn_select_medium_clicked()
+{
+    musicPlayer.stopMusic();
+    musicPlayer.playBackgroundGameMusic();
+    gameLogic->startGame(GameLogic::Medium);
+    this->slideToIndex(ui->mainStack, 7);
+}
+
+
+void MainWindow::on_btn_select_hard_clicked()
+{
+    musicPlayer.stopMusic();
+    musicPlayer.playBackgroundGameMusic();
+    gameLogic->startGame(GameLogic::Hard);
+    this->slideToIndex(ui->mainStack, 7);
 }
 
