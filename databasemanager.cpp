@@ -230,6 +230,25 @@ int Database::getUserHard(const QString &login)
 }
 
 
+QString Database::getUserNick(int id)
+{
+    QSqlQuery query;
+    query.prepare("SELECT login FROM users WHERE id = :userId");
+    query.bindValue(":userId", id);
+
+    if(!query.exec()) {
+        qDebug() << "Get username by ID error:" << query.lastError();
+        return QString();
+    }
+
+    if(query.next()) {
+        return query.value(0).toString();
+    }
+
+    return QString();
+}
+
+
 int Database::calculateExpForNextLevel(int currentLevel)
 {
     // Формула для расчета необходимого опыта для следующего уровня
@@ -352,5 +371,22 @@ bool Database::levelUpUser(const QString &login)
     }
 
     qDebug() << "User" << login << "leveled up to" << (currentLevel + 1);
+    return true;
+}
+
+
+bool Database::changeNick(int id, const QString &newNick)
+{
+    if(id <= 0) return false;
+
+    QSqlQuery query;
+    query.prepare("UPDATE users SET login = :login WHERE id = :id");
+    query.bindValue(":login", newNick);
+    query.bindValue(":id", id);
+
+    if(!query.exec()) {
+        qDebug() << "Change nick error:" << query.lastError();
+        return false;
+    }
     return true;
 }

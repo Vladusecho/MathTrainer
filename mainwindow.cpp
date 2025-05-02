@@ -312,7 +312,7 @@ void MainWindow::on_btn_exit_game_clicked()
 
 void MainWindow::setProfileInfo()
 {
-    ui->ll_nickname->setText(user.getNickname());
+    ui->ll_nickname->setText(db.getUserNick(user.getId()));
     ui->ll_lvl->setNum(user.getLvl());
     ui->ll_exp->setNum(user.getExp());
     ui->ll_needed_exp->setNum(user.getRemainingExp());
@@ -440,7 +440,7 @@ void MainWindow::on_btn_to_reg_clicked()
         showWarningMessage("Внимание!", "Пустые поля недопустимы.");
     }
     else if (!checkLogin(login)) {
-        showWarningMessage("Ваш логин некорректен!","-Длина от 3 до 20 символов\n-Латинские буквы\n-Цифры\n-Спец. символы (_, -, .))");
+        showWarningMessage("Ваш логин некорректен!","-Длина от 3 до 20 символов\n-Латинские буквы\n-Цифры\n-Спец. символы (_ - .)");
     }
     else if (db.isLoginExists(login)) {
         showWarningMessage("Внимание!", "Пользователь с таким логином уже существует!");
@@ -635,4 +635,38 @@ void MainWindow::on_btn_back_stat_clicked()
 {
     moveToPage(PROFILE_PAGE);
 }
+
+
+void MainWindow::on_btn_new_nick_back_clicked()
+{
+    moveToPage(PROFILE_PAGE);
+}
+
+
+void MainWindow::on_btn_change_nickname_clicked()
+{
+    moveToPage(NEW_NICK_PAGE);
+}
+
+
+void MainWindow::on_btn_change_nickname_commit_clicked()
+{
+    QString newLogin = ui->le_new_nick->text().trimmed();
+
+    if (newLogin.isEmpty()) {
+        showWarningMessage("Внимание!", "Пустые поля недопустимы.");
+    }
+    else if (!checkLogin(newLogin)) {
+        showWarningMessage("Ваш логин некорректен!","-Длина от 3 до 20 символов\n-Латинские буквы\n-Цифры\n-Спец. символы (_ - .)");
+    }
+    else if (db.isLoginExists(newLogin)) {
+        showWarningMessage("Внимание!", "Пользователь с таким логином уже существует!");
+    }
+    else if (db.changeNick(user.getId(), newLogin)){
+        showSuccessMessage("Логин успешно изменён!");
+        MainWindow::on_btn_profile_clicked();
+        ui->le_new_nick->clear();
+    }
+}
+
 
