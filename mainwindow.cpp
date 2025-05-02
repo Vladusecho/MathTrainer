@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <QStackedLayout>
 #include <QRegularExpression>
+#include <QIntValidator>
 #include "mathtrainer.h"
 
 
@@ -17,7 +18,46 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     musicPlayer.playBackgroundMusic();
+    updateSoundButtonIcon();
 
+    setStatusBar();
+
+    setDigitalBackground();
+
+    setNoFocusButtons();
+
+    setGameLogic();
+}
+
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+void MainWindow::setDigitalBackground()
+{
+    backgroundContainer = new QWidget(this);
+    backgroundContainer->setStyleSheet("background: transparent;");
+
+    digitalBg = new DigitalBackground(backgroundContainer);
+    digitalBg->setDigitColors({Qt::cyan, Qt::green, Qt::white});
+    digitalBg->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    ui->mainStack->setParent(backgroundContainer);
+
+    QStackedLayout* stackLayout = new QStackedLayout(backgroundContainer);
+    stackLayout->setStackingMode(QStackedLayout::StackAll);
+    stackLayout->addWidget(ui->mainStack);
+    stackLayout->addWidget(digitalBg);
+
+    setCentralWidget(backgroundContainer);
+}
+
+
+void MainWindow::setStatusBar()
+{
     QLabel *author = new QLabel("Vladislav Korzun 2025");
     author->setStyleSheet(
         "color: rgb(158, 79, 255);"
@@ -36,120 +76,128 @@ MainWindow::MainWindow(QWidget *parent)
         "font-weight: bold;"
         "}"
         );
+    ui->le_answer->setValidator(new QIntValidator(this));
+}
 
-    updateSoundButtonIcon();
 
-    // 1. Создаем контейнер для фона
-    backgroundContainer = new QWidget(this);
-    backgroundContainer->setStyleSheet("background: transparent;");
-
-    // 2. Создаем анимированный фон
-    digitalBg = new DigitalBackground(backgroundContainer);
-    digitalBg->setDigitColors({Qt::cyan, Qt::green, Qt::white});
-    digitalBg->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    ui->mainStack->setParent(backgroundContainer);
-
-    QStackedLayout* stackLayout = new QStackedLayout(backgroundContainer);
-    stackLayout->setStackingMode(QStackedLayout::StackAll);
-
-    stackLayout->addWidget(ui->mainStack); // Затем стек
-    stackLayout->addWidget(digitalBg);      // Сначала фон
-
-    // 5. Заменяем центральный виджет (или там где у вас был стек)
-    setCentralWidget(backgroundContainer);
-
-    for (QPushButton* button : findChildren<QPushButton*>()) {
-        button->setFocusPolicy(Qt::NoFocus);
-        button->setStyleSheet("QPushButton { outline: none; color:rgb(158, 79, 255); background:rgb(120, 255, 192)}");
-    }
-
+void MainWindow::setGameLogic()
+{
     gameLogic = new GameLogic(this);
 
-    // connect(ui->mediumButton, &QPushButton::clicked, [this]() {
-    //     m_gameLogic->startGame(GameLogic::Medium);
-    // });
-    // connect(ui->hardButton, &QPushButton::clicked, [this]() {
-    //     m_gameLogic->startGame(GameLogic::Hard);
-    // });
+    connect(
+        gameLogic,
+        &GameLogic::newProblemGenerated,
+        this,
+        [this](const QString &problem)
+        {
+            ui->ll_question->setText(problem);
+        });
 
-    // Подключение игровой логики
-    connect(gameLogic, &GameLogic::newProblemGenerated, this, [this](const QString &problem) {
+    connect(
+        gameLogic,
+        &GameLogic::timeUpdated,
+        this,
+        [this](const QString &time)
+        {
+            ui->ll_timer->setText(time);
+        });
 
-        ui->ll_question->setText(problem);
-    });
-
-    connect(gameLogic, &GameLogic::timeUpdated, this, [this](const QString &time) {
-        ui->ll_timer->setText(time);
-    });
-
-    connect(gameLogic, &GameLogic::gameFinished, this, [this](int score, int incorrect, GameLogic::Difficulty diff) {
-        musicPlayer.stopMusic();
-        musicPlayer.playBackgroundMusic();
-        this->slideToIndex(ui->mainStack, 8);
-        ui->ll_correct_answers->setNum(score);
-        ui->ll_incorrect_answers->setNum(incorrect);
-        int exp = 0;
-        if (score - incorrect > 0) exp = score - incorrect;
-        switch (diff) {
-        case GameLogic::Easy:
-            ui->ll_added_exp->setNum(exp);
-            user.addExp(exp);
-            db.addUserExp(user.getNickname(), exp);
-            db.addUserEasy(user.getNickname(), score);
-            if (score > user.getEasy()) {
-                user.setEasy(score);
+    connect(
+        gameLogic,
+        &GameLogic::gameFinished,
+        this,
+        [this](int score, int incorrect, GameLogic::Difficulty diff)
+        {
+            musicPlayer.stopMusic();
+            musicPlayer.playBackgroundMusic();
+            ui->le_answer->clear();
+            this->slideToIndex(ui->mainStack, 8);
+            ui->ll_correct_answers->setNum(score);
+            ui->ll_incorrect_answers->setNum(incorrect);
+            int exp = 0;
+            if (score - incorrect > 0) exp = score - incorrect;
+            switch (diff) {
+            case GameLogic::Easy:
+                ui->ll_added_exp->setNum(exp);
+                user.addExp(exp);
+                db.addUserExp(user.getNickname(), exp);
+                db.addUserEasy(user.getNickname(), score);
+                if (score > user.getEasy()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getEasy()).arg(score));
+                    user.setEasy(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getEasy()));
+                }
+                break;
+            case GameLogic::Medium:
+                ui->ll_added_exp->setNum(exp * 2);
+                user.addExp(exp * 2);
+                db.addUserExp(user.getNickname(), exp * 2);
+                db.addUserMedium(user.getNickname(), score);
+                if (score > user.getMedium()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getMedium()).arg(score));
+                    user.setMedium(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getMedium()));
+                }
+                break;
+            case GameLogic::Hard:
+                ui->ll_added_exp->setNum(exp * 5);
+                user.addExp(exp * 5);
+                db.addUserExp(user.getNickname(), exp * 5);
+                db.addUserHard(user.getNickname(), score);
+                if (score > user.getHard()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getHard()).arg(score));
+                    user.setHard(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getHard()));
+                }
+                break;
             }
-            break;
-        case GameLogic::Medium:
-            ui->ll_added_exp->setNum(exp * 2);
-            user.addExp(exp * 2);
-            db.addUserExp(user.getNickname(), exp * 2);
-            db.addUserMedium(user.getNickname(), score);
-            if (score > user.getMedium()) {
-                user.setMedium(score);
-            }
-            break;
-        case GameLogic::Hard:
-            ui->ll_added_exp->setNum(exp * 5);
-            user.addExp(exp * 5);
-            db.addUserExp(user.getNickname(), exp * 5);
-            db.addUserHard(user.getNickname(), score);
-            if (score > user.getHard()) {
-                user.setHard(score);
-            }
-            break;
-        }
-    });
+        });
 
-    connect(ui->le_answer, &QLineEdit::returnPressed, this, [this](){
+    connect(
+        ui->le_answer,
+        &QLineEdit::returnPressed,
+        this,
+        [this]()
+    {
         gameLogic->checkAnswer(ui->le_answer);
     });
 }
 
 
-MainWindow::~MainWindow()
+void MainWindow::setNoFocusButtons()
 {
-    delete ui;
+    for (QPushButton* button : findChildren<QPushButton*>()) {
+        button->setFocusPolicy(Qt::NoFocus);
+        button->setStyleSheet("QPushButton { outline: none; color:rgb(158, 79, 255); background:rgb(120, 255, 192)}");
+    }
+}
+
+
+void MainWindow::moveToPage(int page)
+{
+    this->slideToIndex(ui->mainStack, page);
 }
 
 
 void MainWindow::on_btn_reg_clicked()
 {
-    this->slideToIndex(ui->mainStack, 3);
+    moveToPage(REGISTER_PAGE);
 }
 
 
 void MainWindow::on_btn_login_clicked()
 {
-    this->slideToIndex(ui->mainStack, 4);
+    moveToPage(LOGIN_PAGE);
     ui->le_login_login->setFocus();
 }
 
 
 void MainWindow::on_btn_about_clicked()
 {
-    this->slideToIndex(ui->mainStack, 5);
+    moveToPage(ABOUT_PAGE);
 }
 
 
@@ -212,7 +260,7 @@ void MainWindow::slideToIndex(QStackedWidget *stack, int newIndex)
 
 void MainWindow::handleDialogClosed(const QString &username, const QString &password)
 {
-    this->slideToIndex(ui->mainStack, 1);
+    moveToPage(MENU_PAGE);
     qDebug() << "Получены данные:";
     qDebug() << "Логин:" << username;
     qDebug() << "Пароль:" << password;
@@ -230,11 +278,11 @@ void MainWindow::handleDialogClosed(const QString &username, const QString &pass
 void MainWindow::on_btn_change_account_clicked()
 {
     statusBar()->clearMessage();
-    this->slideToIndex(ui->mainStack, 0);
+    moveToPage(MAIN);
 }
 
 
-void MainWindow::on_btn_exit_game_clicked()
+void MainWindow::createFinishDialog()
 {
     QMessageBox msg;
     msg.setIcon(QMessageBox::Warning);
@@ -256,19 +304,31 @@ void MainWindow::on_btn_exit_game_clicked()
 }
 
 
-void MainWindow::on_btn_profile_clicked()
+void MainWindow::on_btn_exit_game_clicked()
+{
+    createFinishDialog();
+}
+
+
+void MainWindow::setProfileInfo()
 {
     ui->ll_nickname->setText(user.getNickname());
     ui->ll_lvl->setNum(user.getLvl());
     ui->ll_exp->setNum(user.getExp());
     ui->ll_needed_exp->setNum(user.getRemainingExp());
-    this->slideToIndex(ui->mainStack, 2);
+}
+
+
+void MainWindow::on_btn_profile_clicked()
+{
+    setProfileInfo();
+    moveToPage(PROFILE_PAGE);
 }
 
 
 void MainWindow::on_btn_profile_back_clicked()
 {
-    this->slideToIndex(ui->mainStack, 1);
+    moveToPage(MENU_PAGE);
 }
 
 
@@ -278,10 +338,10 @@ void MainWindow::on_btn_sound_clicked()
     updateSoundButtonIcon();
 
     if (musicPlayer.isMuted()) {
-        ui->verticalSlider->setValue(0);
+        ui->verticalSlider_1->setValue(0);
         ui->verticalSlider_2->setValue(0);
     } else {
-        ui->verticalSlider->setValue(musicPlayer.volume());
+        ui->verticalSlider_1->setValue(musicPlayer.volume());
         ui->verticalSlider_2->setValue(musicPlayer.volume());
     }
 }
@@ -309,7 +369,7 @@ void MainWindow::on_btn_sound_2_clicked()
 }
 
 
-void MainWindow::on_verticalSlider_valueChanged(int value)
+void MainWindow::on_verticalSlider_1_valueChanged(int value)
 {
     if (!updatingSliders) {
         updatingSliders = true;
@@ -337,7 +397,7 @@ void MainWindow::on_verticalSlider_2_valueChanged(int value)
     if (!updatingSliders) {
         updatingSliders = true;
         musicPlayer.setVolume(value);
-        ui->verticalSlider->setValue(value);  // Синхронизируем первый ползунок
+        ui->verticalSlider_1->setValue(value);  // Синхронизируем первый ползунок
         updatingSliders = false;
     }
 
@@ -355,12 +415,18 @@ void MainWindow::on_verticalSlider_2_valueChanged(int value)
 }
 
 
-void MainWindow::on_btn_back_reg_clicked()
+void MainWindow::cleanRegisterLabels()
 {
-    this->slideToIndex(ui->mainStack, 0);
     ui->le_login_reg->setText("");
     ui->le_pass_reg->setText("");
     ui->le_repeat_pass_reg->setText("");
+}
+
+
+void MainWindow::on_btn_back_reg_clicked()
+{
+    moveToPage(MAIN);
+    cleanRegisterLabels();
 }
 
 
@@ -467,46 +533,79 @@ void MainWindow::on_btn_to_start_clicked()
 }
 
 
-void MainWindow::on_btn_back_login_clicked()
+void MainWindow::cleanLoginLabels()
 {
-    this->slideToIndex(ui->mainStack, 0);
     ui->le_login_login->setText("");
     ui->le_pass_login->setText("");
 }
 
 
+void MainWindow::on_btn_back_login_clicked()
+{
+    moveToPage(MAIN);
+    cleanLoginLabels();
+}
+
+
 void MainWindow::on_btn_back_about_clicked()
 {
-    this->slideToIndex(ui->mainStack, 0);
+    moveToPage(MAIN);
 }
 
 
 void MainWindow::on_btn_back_lvl_clicked()
 {
-    this->slideToIndex(ui->mainStack, 1);
+    moveToPage(MENU_PAGE);
+}
+
+
+void MainWindow::startGame(GameLogic::Difficulty difficulty)
+{
+    musicPlayer.stopMusic();
+    musicPlayer.playBackgroundGameMusic();
+    gameLogic->startGame(difficulty);
 }
 
 
 void MainWindow::on_btn_select_easy_clicked()
 {
-    musicPlayer.stopMusic();
-    musicPlayer.playBackgroundGameMusic();
-    gameLogic->startGame(GameLogic::Easy);
-    this->slideToIndex(ui->mainStack, 7);
+    startGame(GameLogic::Easy);
+    moveToPage(GAME_PAGE);
+}
+
+
+void MainWindow::on_btn_select_medium_clicked()
+{
+    startGame(GameLogic::Medium);
+    moveToPage(GAME_PAGE);
+}
+
+
+void MainWindow::on_btn_select_hard_clicked()
+{
+    startGame(GameLogic::Hard);
+    moveToPage(GAME_PAGE);
 }
 
 
 void MainWindow::on_btn_select_lvl_clicked()
 {
-    this->slideToIndex(ui->mainStack, 6);
+    moveToPage(SELECT_LVL_PAGE);
+}
+
+
+void MainWindow::stopGame()
+{
+    musicPlayer.stopMusic();
+    musicPlayer.playBackgroundMusic();
+    gameLogic->endGameFromBack();
+    ui->le_answer->clear();
 }
 
 
 void MainWindow::on_btn_back_game_clicked()
 {
-    musicPlayer.stopMusic();
-    musicPlayer.playBackgroundMusic();
-    gameLogic->endGameFromBack();
+    stopGame();
     MainWindow::on_btn_select_lvl_clicked();
 }
 
@@ -517,35 +616,23 @@ void MainWindow::on_btn_back_finish_clicked()
 }
 
 
-void MainWindow::on_btn_stats_clicked()
+void MainWindow::setStatsInfo()
 {
     ui->ll_easy_stat->setNum(user.getEasy());
     ui->ll_medium_stat->setNum(user.getMedium());
     ui->ll_hard_stat->setNum(user.getHard());
-    this->slideToIndex(ui->mainStack, 9);
+}
+
+
+void MainWindow::on_btn_stats_clicked()
+{
+    setStatsInfo();
+    moveToPage(STATS_PAGE);
 }
 
 
 void MainWindow::on_btn_back_stat_clicked()
 {
-    this->slideToIndex(ui->mainStack, 2);
-}
-
-
-void MainWindow::on_btn_select_medium_clicked()
-{
-    musicPlayer.stopMusic();
-    musicPlayer.playBackgroundGameMusic();
-    gameLogic->startGame(GameLogic::Medium);
-    this->slideToIndex(ui->mainStack, 7);
-}
-
-
-void MainWindow::on_btn_select_hard_clicked()
-{
-    musicPlayer.stopMusic();
-    musicPlayer.playBackgroundGameMusic();
-    gameLogic->startGame(GameLogic::Hard);
-    this->slideToIndex(ui->mainStack, 7);
+    moveToPage(PROFILE_PAGE);
 }
 

@@ -1,11 +1,13 @@
 #include "databasemanager.h"
 #include <cmath>
 
+
 Database::Database(QObject *parent) : QObject(parent), databaseName("game_database.sqlite")
 {
     connectToDatabase();
     createTables();
 }
+
 
 Database::~Database()
 {
@@ -14,6 +16,7 @@ Database::~Database()
         db.close();
     }
 }
+
 
 bool Database::connectToDatabase()
 {
@@ -28,6 +31,7 @@ bool Database::connectToDatabase()
         return true;
     }
 }
+
 
 bool Database::createTables()
 {
@@ -52,6 +56,7 @@ bool Database::createTables()
     return true;
 }
 
+
 bool Database::isLoginExists(const QString &login)
 {
     QSqlQuery query;
@@ -70,6 +75,7 @@ bool Database::isLoginExists(const QString &login)
     return false;
 }
 
+
 int Database::getUserIdByLogin(const QString &login)
 {
     QSqlQuery query;
@@ -87,6 +93,7 @@ int Database::getUserIdByLogin(const QString &login)
 
     return -1;
 }
+
 
 bool Database::registerUser(const QString &login, const QString &password)
 {
@@ -107,6 +114,7 @@ bool Database::registerUser(const QString &login, const QString &password)
     return true;
 }
 
+
 bool Database::authenticateUser(const QString &login, const QString &password)
 {
     QSqlQuery query;
@@ -126,6 +134,7 @@ bool Database::authenticateUser(const QString &login, const QString &password)
     return false;
 }
 
+
 int Database::getUserLevel(const QString &login)
 {
     QSqlQuery query;
@@ -143,6 +152,7 @@ int Database::getUserLevel(const QString &login)
 
     return -1;
 }
+
 
 int Database::getUserExp(const QString &login)
 {
@@ -162,6 +172,7 @@ int Database::getUserExp(const QString &login)
     return -1;
 }
 
+
 int Database::getUserEasy(const QString &login)
 {
     QSqlQuery query;
@@ -179,6 +190,7 @@ int Database::getUserEasy(const QString &login)
 
     return -1;
 }
+
 
 int Database::getUserMedium(const QString &login)
 {
@@ -198,6 +210,7 @@ int Database::getUserMedium(const QString &login)
     return -1;
 }
 
+
 int Database::getUserHard(const QString &login)
 {
     QSqlQuery query;
@@ -216,17 +229,18 @@ int Database::getUserHard(const QString &login)
     return -1;
 }
 
+
 int Database::calculateExpForNextLevel(int currentLevel)
 {
     // Формула для расчета необходимого опыта для следующего уровня
     return static_cast<int>(BASE_EXP_REQUIRED * pow(EXP_GROWTH_RATE, currentLevel - 1));
 }
 
+
 bool Database::addUserExp(const QString &login, int expToAdd)
 {
     if(expToAdd <= 0) return false;
 
-    // Получаем текущие данные пользователя
     int currentExp = getUserExp(login);
     int currentLevel = getUserLevel(login);
 
@@ -245,7 +259,6 @@ bool Database::addUserExp(const QString &login, int expToAdd)
         return false;
     }
 
-    // Проверяем, не заработал ли пользователь достаточно опыта для нового уровня
     if(newExp >= expNeeded) {
         return levelUpUser(login);
     }
@@ -253,11 +266,11 @@ bool Database::addUserExp(const QString &login, int expToAdd)
     return true;
 }
 
+
 bool Database::addUserEasy(const QString &login, int easy)
 {
     if(easy <= 0) return false;
 
-    // Получаем текущие данные пользователя
     int currentEasy = getUserEasy(login);
 
     if (easy <= currentEasy) return false;
@@ -274,11 +287,11 @@ bool Database::addUserEasy(const QString &login, int easy)
     return true;
 }
 
+
 bool Database::addUserMedium(const QString &login, int medium)
 {
     if(medium <= 0) return false;
 
-    // Получаем текущие данные пользователя
     int currentMedium = getUserMedium(login);
 
     if (medium <= currentMedium) return false;
@@ -295,11 +308,11 @@ bool Database::addUserMedium(const QString &login, int medium)
     return true;
 }
 
+
 bool Database::addUserHard(const QString &login, int hard)
 {
     if(hard <= 0) return false;
 
-    // Получаем текущие данные пользователя
     int currentHard = getUserHard(login);
 
     if (hard <= currentHard) return false;
@@ -316,17 +329,15 @@ bool Database::addUserHard(const QString &login, int hard)
     return true;
 }
 
+
 bool Database::levelUpUser(const QString &login)
 {
-    // Получаем текущий уровень
     int currentLevel = getUserLevel(login);
     if(currentLevel == -1) return false;
 
-    // Получаем текущий опыт
     int currentExp = getUserExp(login);
     if(currentExp == -1) return false;
 
-    // Рассчитываем оставшийся опыт после повышения уровня
     int expNeeded = calculateExpForNextLevel(currentLevel);
     int remainingExp = currentExp - expNeeded;
 

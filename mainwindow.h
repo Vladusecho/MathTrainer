@@ -163,7 +163,7 @@ private slots:
 
     void on_btn_sound_2_clicked();
 
-    void on_verticalSlider_valueChanged(int value);
+    void on_verticalSlider_1_valueChanged(int value);
 
     void on_verticalSlider_2_valueChanged(int value);
 
@@ -217,5 +217,29 @@ private:
     void showSuccessMessage(QString text);
     bool checkPassword(QString password);
     bool checkLogin(QString login);
+    void setStatusBar();
+    void setDigitalBackground();
+    void setGameLogic();
+    void setNoFocusButtons();
+
+    const int MAIN = 0;
+    const int MENU_PAGE = 1;
+    const int PROFILE_PAGE = 2;
+    const int REGISTER_PAGE = 3;
+    const int LOGIN_PAGE = 4;
+    const int ABOUT_PAGE = 5;
+    const int SELECT_LVL_PAGE = 6;
+    const int GAME_PAGE = 7;
+    const int FINISH_PAGE = 8;
+    const int STATS_PAGE = 9;
+
+    void moveToPage(int page);
+    void createFinishDialog();
+    void setProfileInfo();
+    void cleanRegisterLabels();
+    void cleanLoginLabels();
+    void startGame(GameLogic::Difficulty difficulty);
+    void stopGame();
+    void setStatsInfo();
 };
 #endif // MAINWINDOW_H

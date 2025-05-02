@@ -42,6 +42,7 @@ void MusicPlayer::stopMusic()
     player->stop();
 }
 
+
 void MusicPlayer::setVolume(int volume)
 {
     volume = qBound(0, volume, 100);
@@ -54,15 +55,18 @@ void MusicPlayer::setVolume(int volume)
     }
 }
 
+
 int MusicPlayer::volume() const
 {
     return qRound(audioOutput->volume() * 100);
 }
 
+
 bool MusicPlayer::isPlaying() const
 {
     return player->playbackState() == QMediaPlayer::PlayingState;
 }
+
 
 void MusicPlayer::toggleMute() {
     if (isMuted()) {
@@ -73,6 +77,7 @@ void MusicPlayer::toggleMute() {
         setVolume(0);
     }
 }
+
 
 bool MusicPlayer::isMuted() const
 {
