@@ -44,7 +44,7 @@
       <height>371</height>
      </rect>
     </property>
-    <widget class="QWidget" name="main">
+    <widget class="QWidget" name="main_page">
      <widget class="QWidget" name="gridLayoutWidget">
       <property name="geometry">
        <rect>
@@ -478,7 +478,7 @@ background:rgb(120, 255, 192)</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="profile">
+    <widget class="QWidget" name="profile_page">
      <widget class="QLabel" name="ll_main_menu_2">
       <property name="geometry">
        <rect>
@@ -1768,7 +1768,7 @@ background:rgb(120, 255, 192)</string>
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="stats">
+    <widget class="QWidget" name="stats_page">
      <widget class="QPushButton" name="btn_back_stat">
       <property name="geometry">
        <rect>
@@ -2004,6 +2004,115 @@ background:rgb(120, 255, 192)</string>
         </widget>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="new_nick_page">
+     <widget class="QLineEdit" name="le_new_nick">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>150</y>
+        <width>295</width>
+        <height>48</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>22</pointsize>
+        <italic>true</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255)</string>
+      </property>
+      <property name="placeholderText">
+       <string>user42</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_change_nickname_commit">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>230</y>
+        <width>201</width>
+        <height>43</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>16</pointsize>
+        <bold>true</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+      </property>
+      <property name="text">
+       <string>Изменить</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
+      <property name="default">
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_new_nick_back">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>230</y>
+        <width>211</width>
+        <height>43</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+        <pointsize>19</pointsize>
+        <bold>true</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(158, 79, 255);
+background:rgb(120, 255, 192)</string>
+      </property>
+      <property name="text">
+       <string>Назад</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
      </widget>
     </widget>
    </widget>

@@ -22,6 +22,8 @@ public:
     int getUserIdByLogin(const QString &login);
     bool registerUser(const QString &login, const QString &password);
     bool authenticateUser(const QString &login, const QString &password);
+    bool changeNick(int id, const QString &newNick);
+    QString getUserNick(int id);
 
     int getUserLevel(const QString &login);
     int getUserExp(const QString &login);
@@ -35,6 +37,7 @@ public:
     bool levelUpUser(const QString &login);
 
     int calculateExpForNextLevel(int currentLevel);
+
 
 private:
     QSqlDatabase db;

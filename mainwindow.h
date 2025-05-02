@@ -195,6 +195,12 @@ private slots:
 
     void on_btn_select_hard_clicked();
 
+    void on_btn_new_nick_back_clicked();
+
+    void on_btn_change_nickname_clicked();
+
+    void on_btn_change_nickname_commit_clicked();
+
 private:
     Ui::MainWindow *ui;
     User user;
@@ -232,6 +238,7 @@ private:
     const int GAME_PAGE = 7;
     const int FINISH_PAGE = 8;
     const int STATS_PAGE = 9;
+    const int NEW_NICK_PAGE = 10;
 
     void moveToPage(int page);
     void createFinishDialog();
