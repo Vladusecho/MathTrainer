@@ -79,40 +79,33 @@ void DigitalBackground::paintEvent(QPaintEvent *) {
         font.setStyleStrategy(QFont::PreferAntialias);
         painter.setFont(font);
 
-        // 3.2. Настройка цвета с прозрачностью
         QColor color = d.color;
         color.setAlphaF(d.opacity);
 
-        // 3.4. Рисуем саму цифру
         painter.save();
         painter.translate(d.position);
-
-        // // Случайный наклон (-15..+15 градусов)
-        // painter.rotate(rng->bounded(30) - 15);
-
-        // Случайное масштабирование (0.8..1.2)
-        // qreal scale = 0.8 + rng->bounded(40) / 100.0;
-        // painter.scale(scale, scale);
-
         painter.setPen(color);
         painter.drawText(0, 0, d.value);
         painter.restore();
     }
 }
 
+
 void DigitalBackground::resizeEvent(QResizeEvent *) {
     initDigits();
 }
 
-// Дополнительные настройки
+
 void DigitalBackground::setDigitColors(const QVector<QColor>& colors) {
     m_colors = colors;
     initDigits();
 }
 
+
 void DigitalBackground::setDigitSpeed(int speed) {
     m_speed = speed;
 }
+
 
 void DigitalBackground::setFontSizeRange(int min, int max) {
     m_minFontSize = min;

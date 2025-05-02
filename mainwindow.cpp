@@ -7,6 +7,7 @@
 #include <QMediaPlayer>
 #include <QStackedLayout>
 #include <QRegularExpression>
+#include <QIntValidator>
 #include "mathtrainer.h"
 
 
@@ -75,6 +76,7 @@ void MainWindow::setStatusBar()
         "font-weight: bold;"
         "}"
         );
+    ui->le_answer->setValidator(new QIntValidator(this));
 }
 
 
@@ -121,7 +123,10 @@ void MainWindow::setGameLogic()
                 db.addUserExp(user.getNickname(), exp);
                 db.addUserEasy(user.getNickname(), score);
                 if (score > user.getEasy()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getEasy()).arg(score));
                     user.setEasy(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getEasy()));
                 }
                 break;
             case GameLogic::Medium:
@@ -130,7 +135,10 @@ void MainWindow::setGameLogic()
                 db.addUserExp(user.getNickname(), exp * 2);
                 db.addUserMedium(user.getNickname(), score);
                 if (score > user.getMedium()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getMedium()).arg(score));
                     user.setMedium(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getMedium()));
                 }
                 break;
             case GameLogic::Hard:
@@ -139,7 +147,10 @@ void MainWindow::setGameLogic()
                 db.addUserExp(user.getNickname(), exp * 5);
                 db.addUserHard(user.getNickname(), score);
                 if (score > user.getHard()) {
+                    ui->ll_new_record->setText(QString("Рекорд побит! %1 -> %2").arg(user.getHard()).arg(score));
                     user.setHard(score);
+                } else {
+                    ui->ll_new_record->setText(QString("Рекорд пока не побит: %1").arg(user.getHard()));
                 }
                 break;
             }
