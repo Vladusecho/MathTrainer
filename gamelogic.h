@@ -31,7 +31,6 @@ private:
     void generateProblem();
     void endGame();
 
-
     QStackedWidget *stack;
     QTimer *gameTimer;
     QTimer *countdownTimer;

@@ -1,18 +1,19 @@
 #include "digitalbackground.h"
-
 #include <QRandomGenerator>
 #include <QDateTime>
 #include <QPainter>
+
 
 DigitalBackground::DigitalBackground(QWidget *parent)
     : QWidget(parent), m_colors({Qt::green, Qt::cyan, Qt::white}) {
     setAttribute(Qt::WA_TranslucentBackground);
     m_timer = new QTimer(this);
     connect(m_timer, &QTimer::timeout, this, &DigitalBackground::updateDigits);
-    m_timer->start(50); // Частота обновления
+    m_timer->start(40); // Частота обновления
 
     initDigits();
 }
+
 
 void DigitalBackground::initDigits() {
     m_digits.clear();
@@ -30,11 +31,13 @@ void DigitalBackground::initDigits() {
     }
 }
 
+
 QString DigitalBackground::randomDigit() const {
-    static const QString digits = "0123456789π√∞%&";
+    static const QString digits = "0123456789+=-";
     auto *rng = QRandomGenerator::global();
     return QString(digits[rng->bounded(digits.length())]);
 }
+
 
 void DigitalBackground::updateDigits() {
     auto *rng = QRandomGenerator::global();
@@ -57,25 +60,22 @@ void DigitalBackground::updateDigits() {
     update();
 }
 
+
 void DigitalBackground::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
-    // 1. Рисуем градиентный фон (от темного к черному)
     QLinearGradient gradient(0, 0, 0, height());
     gradient.setColorAt(0, QColor(170, 255, 255));
     gradient.setColorAt(1, QColor(170, 255, 255));
     painter.fillRect(rect(), gradient);
 
-    // 2. Настраиваем генератор случайных чисел
     auto *rng = QRandomGenerator::global();
 
-    // 3. Рисуем цифры с эффектами
     painter.setRenderHint(QPainter::Antialiasing, true);
     painter.setRenderHint(QPainter::TextAntialiasing, true);
 
     for (const Digit &d : m_digits) {
-        // 3.1. Настройка шрифта
-        QFont font("Monospace", d.fontSize, QFont::Bold);
+        QFont font("Verdana", d.fontSize, QFont::Bold);
         font.setStyleStrategy(QFont::PreferAntialias);
         painter.setFont(font);
 
@@ -87,12 +87,12 @@ void DigitalBackground::paintEvent(QPaintEvent *) {
         painter.save();
         painter.translate(d.position);
 
-        // Случайный наклон (-15..+15 градусов)
-        painter.rotate(rng->bounded(30) - 15);
+        // // Случайный наклон (-15..+15 градусов)
+        // painter.rotate(rng->bounded(30) - 15);
 
         // Случайное масштабирование (0.8..1.2)
-        qreal scale = 0.8 + rng->bounded(40) / 100.0;
-        painter.scale(scale, scale);
+        // qreal scale = 0.8 + rng->bounded(40) / 100.0;
+        // painter.scale(scale, scale);
 
         painter.setPen(color);
         painter.drawText(0, 0, d.value);

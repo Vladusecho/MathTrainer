@@ -232,7 +232,7 @@ background:rgb(120, 255, 192)</string>
        <string/>
       </property>
      </widget>
-     <widget class="QSlider" name="verticalSlider">
+     <widget class="QSlider" name="verticalSlider_1">
       <property name="geometry">
        <rect>
         <x>530</x>
@@ -243,6 +243,9 @@ background:rgb(120, 255, 192)</string>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::NoFocus</enum>
       </property>
       <property name="maximum">
        <number>100</number>

@@ -1,6 +1,4 @@
 #include "gamelogic.h"
-
-#include "gamelogic.h"
 #include <QRandomGenerator>
 #include <QLineEdit>
 #include <QLabel>
@@ -21,13 +19,7 @@ void GameLogic::startGame(Difficulty choosenDifficulty)
     difficulty = choosenDifficulty;
     score = 0;
     incorrects = 0;
-
-    // Установка времени в зависимости от сложности
-    switch(difficulty) {
-    case Easy: timeLeft = 30; break;
-    case Medium: timeLeft = 30; break;
-    case Hard: timeLeft = 30; break;
-    }
+    timeLeft = 30;
 
     emit timeUpdated(QString("Осталось: %1 с.").arg(timeLeft));
 
@@ -39,6 +31,7 @@ void GameLogic::startGame(Difficulty choosenDifficulty)
     generateProblem();
 }
 
+
 void GameLogic::generateProblem()
 {
     int a, b;
@@ -49,7 +42,11 @@ void GameLogic::generateProblem()
     case Easy:
         a = QRandomGenerator::global()->bounded(2, 10);
         b = QRandomGenerator::global()->bounded(2, 10);
-        operation = QRandomGenerator::global()->bounded(3);
+        if ((a % b == 0) && (a > b)) {
+            operation = 3;
+        } else {
+            operation = QRandomGenerator::global()->bounded(3);
+        }
         switch(operation) {
         case 0:
             problem = QString("%1 + %2 = ?").arg(a).arg(b);
@@ -62,6 +59,10 @@ void GameLogic::generateProblem()
         case 2:
             problem = QString("%1 × %2 = ?").arg(a).arg(b);
             currentAnswer = a * b;
+            break;
+        case 3:
+            problem = QString("%1 / %2 = ?").arg(a).arg(b);
+            currentAnswer = a / b;
             break;
         }
         break;
@@ -70,7 +71,9 @@ void GameLogic::generateProblem()
         a = QRandomGenerator::global()->bounded(2, 50);
         b = QRandomGenerator::global()->bounded(2, 50);
         if (a < 12 && b < 12) {
-            operation = QRandomGenerator::global()->bounded(3);
+            operation = 2;
+        } else if ((a % b == 0) && (a > b)) {
+            operation = 3;
         } else {
             operation = QRandomGenerator::global()->bounded(2);
         }
@@ -86,6 +89,10 @@ void GameLogic::generateProblem()
         case 2:
             problem = QString("%1 × %2 = ?").arg(a).arg(b);
             currentAnswer = a * b;
+            break;
+        case 3:
+            problem = QString("%1 / %2 = ?").arg(a).arg(b);
+            currentAnswer = a / b;
             break;
         }
         break;
@@ -94,7 +101,9 @@ void GameLogic::generateProblem()
         a = QRandomGenerator::global()->bounded(2, 500);
         b = QRandomGenerator::global()->bounded(2, 500);
         if (a < 50 && b < 50) {
-            operation = QRandomGenerator::global()->bounded(3);
+            operation = 2;
+        } else if ((a % b == 0) && (a > b)) {
+            operation = 3;
         } else {
             operation = QRandomGenerator::global()->bounded(2);
         }
@@ -111,12 +120,17 @@ void GameLogic::generateProblem()
             problem = QString("%1 × %2 = ?").arg(a).arg(b);
             currentAnswer = a * b;
             break;
+        case 3:
+            problem = QString("%1 / %2 = ?").arg(a).arg(b);
+            currentAnswer = a / b;
+            break;
         }
         break;
     }
 
     emit newProblemGenerated(problem);
 }
+
 
 void GameLogic::checkAnswer(QLineEdit *answerInput)
 {
@@ -128,6 +142,7 @@ void GameLogic::checkAnswer(QLineEdit *answerInput)
     answerInput->clear();
     generateProblem();
 }
+
 
 void GameLogic::updateTimer()
 {
@@ -142,12 +157,14 @@ void GameLogic::updateTimer()
     }
 }
 
+
 void GameLogic::endGame()
 {
     gameTimer->stop();
     countdownTimer->stop();
     emit gameFinished(score, incorrects, difficulty);
 }
+
 
 void GameLogic::endGameFromBack()
 {
